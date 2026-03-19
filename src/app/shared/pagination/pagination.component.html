@@ -1,0 +1,45 @@
+<div class="pagination-info">
+  Showing {{ startItem() }}–{{ endItem() }} of {{ totalItems() }}
+</div>
+
+<div class="pagination-controls">
+  <button
+    (click)="goToPage(1)"
+    [disabled]="currentPage() === 1"
+    aria-label="First page"
+  >
+    &#171;
+  </button>
+  <button
+    (click)="goToPage(currentPage() - 1)"
+    [disabled]="currentPage() === 1"
+    aria-label="Previous page"
+  >
+    &#8249;
+  </button>
+
+  @for (page of visiblePages(); track page) {
+    <button
+      [class.active]="page === currentPage()"
+      (click)="goToPage(page)"
+      [attr.aria-current]="page === currentPage() ? 'page' : null"
+    >
+      {{ page }}
+    </button>
+  }
+
+  <button
+    (click)="goToPage(currentPage() + 1)"
+    [disabled]="currentPage() === totalPages()"
+    aria-label="Next page"
+  >
+    &#8250;
+  </button>
+  <button
+    (click)="goToPage(totalPages())"
+    [disabled]="currentPage() === totalPages()"
+    aria-label="Last page"
+  >
+    &#187;
+  </button>
+</div>
