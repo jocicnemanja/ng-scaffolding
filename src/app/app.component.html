@@ -1,0 +1,13 @@
+@if (auth.isAuthenticated()) {
+  <app-header [title]="title()" (menuToggle)="toggleSideNav()" />
+
+  <div class="app-body">
+    <app-side-nav [items]="navItems()" />
+
+    <main class="main-content">
+      <router-outlet />
+    </main>
+  </div>
+} @else {
+  <router-outlet />
+}

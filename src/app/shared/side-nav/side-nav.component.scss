@@ -1,0 +1,55 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  min-height: 0;
+  padding: 12px 8px;
+  background: #fff;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+  transition: width 0.2s ease;
+  gap: 2px;
+}
+
+:host.collapsed {
+  width: 60px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+  }
+
+  &.active {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+
+  :host ::ng-deep svg {
+    width: 20px;
+    height: 20px;
+  }
+}
