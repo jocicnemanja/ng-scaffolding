@@ -1,0 +1,95 @@
+:host {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 12px;
+  z-index: 10;
+}
+
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.app-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: #fef2f2;
+    color: #dc2626;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}

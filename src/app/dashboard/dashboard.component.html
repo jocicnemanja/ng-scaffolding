@@ -1,0 +1,30 @@
+<h1>Dashboard</h1>
+
+<div class="stats-grid">
+  @for (stat of stats; track stat.label) {
+    <div class="stat-card">
+      <span class="stat-value">{{ stat.value }}</span>
+      <span class="stat-label">{{ stat.label }}</span>
+    </div>
+  }
+</div>
+
+<div class="cards-grid">
+  <div class="card">
+    <h2>Recent Activity</h2>
+    <ul class="activity-list">
+      <li>Alice Johnson updated her profile</li>
+      <li>Bob Smith was added as editor</li>
+      <li>Carol Williams was deactivated</li>
+      <li>David Brown submitted a report</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+      <button class="action-btn">Add User</button>
+      <button class="action-btn">Generate Report</button>
+      <button class="action-btn">View Logs</button>
+    </div>
+  </div>
+</div>

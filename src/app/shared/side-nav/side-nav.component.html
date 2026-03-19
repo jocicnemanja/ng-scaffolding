@@ -1,0 +1,13 @@
+@for (item of items(); track item.route) {
+  <a
+    class="nav-item"
+    [routerLink]="item.route"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+  >
+    <span class="nav-icon" [innerHTML]="item.icon"></span>
+    @if (!collapsed()) {
+      <span class="nav-label">{{ item.label }}</span>
+    }
+  </a>
+}
