@@ -286,3 +286,18 @@ export class Hero {
 ```
 
 For detailed patterns, see [references/component-patterns.md](references/component-patterns.md).
+
+## File & Module Rules
+
+- One component/service/pipe per file.
+- Use standalone components (no NgModule unless legacy).
+- Keep files under ~200 lines; split into sub-components or services if larger.
+- Group related files by feature, not by type:
+  ```
+  feature/
+  ├── login.component.ts
+  ├── login.component.html
+  ├── login.component.scss
+  ```
+
+---
