@@ -1,0 +1,50 @@
+<header class="page-header">
+  <h1>Users</h1>
+  <app-filter placeholder="Filter users..." (filterChange)="store.setFilter($event)" />
+</header>
+
+@if (store.isLoading()) {
+  <div class="loading-state">Loading users…</div>
+} @else if (store.hasError()) {
+  <div class="error-state">
+    {{ store.errorMessage() }}
+    <button (click)="store.loadUsers()">Retry</button>
+  </div>
+} @else {
+  <app-table>
+    <ng-container table-header>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Status</th>
+    </ng-container>
+
+    <ng-container table-body>
+      @for (user of store.paginatedUsers(); track user.id) {
+        <tr>
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge" [class]="'badge--' + user.role">{{ user.role }}</span>
+          </td>
+          <td>
+            <span class="status" [class]="'status--' + user.status">{{ user.status }}</span>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="empty-state">No users found.</td>
+        </tr>
+      }
+    </ng-container>
+  </app-table>
+
+  @if (store.totalItems() > 0) {
+    <app-pagination
+      [currentPage]="store.currentPage()"
+      [totalItems]="store.totalItems()"
+      [pageSize]="store.pageSize"
+      (pageChange)="store.setPage($event)"
+    />
+  }
+}
