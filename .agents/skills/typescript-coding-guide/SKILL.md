@@ -27,7 +27,9 @@ function getUser(id: number): User {
 ```ts
 submit() {
   this.formRef.markAllAsTouched();
-  if (this.formRef.invalid) return;
+  if (this.formRef.invalid){
+     return;
+  }
 
   const payload = this.formRef.toPayload;
   this.save(payload);
@@ -36,7 +38,9 @@ submit() {
 
 ```ts
 onClick(event: Event) {
-  if (this.disabled()) return;
+  if (this.disabled()) {
+    return;
+  }
 
   this.clicked.emit();
 }
@@ -97,9 +101,15 @@ For 3+ branches, prefer `switch`, a lookup map, or early returns over chained `i
 
 ```ts
 function getDiscount(role: string): number {
-  if (role === 'admin') return 0.3;
-  if (role === 'editor') return 0.15;
-  if (role === 'viewer') return 0.05;
+  if (role === 'admin') {
+    return 0.3;
+  }
+  if (role === 'editor') {
+    return 0.15;
+  }
+  if (role === 'viewer') {
+    return 0.05;
+  }
   return 0;
 }
 ```

@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthUser } from './auth.model';
 
@@ -6,13 +6,16 @@ const STORAGE_KEY = 'auth_user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private router = inject(Router);
   private currentUser = signal<AuthUser | null>(this.loadFromStorage());
 
   user = this.currentUser.asReadonly();
   isAuthenticated = computed(() => this.currentUser() !== null);
   isAdmin = computed(() => this.currentUser()?.role === 'admin');
-
-  constructor(private router: Router) {}
+  token = computed(() => {
+    const user = this.currentUser();
+    return user ? `session-${user.id}` : null;
+  });
 
   login(email: string, _password: string): boolean {
     // Mock authentication — replace with real HTTP call
