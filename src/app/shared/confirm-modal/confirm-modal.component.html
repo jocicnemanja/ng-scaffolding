@@ -1,0 +1,28 @@
+<div
+  class="confirm-modal__dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="confirm-modal-title"
+  (keydown.escape)="dismiss()"
+  (click)="$event.stopPropagation()"
+>
+  <h2 id="confirm-modal-title" class="confirm-modal__title">{{ title() }}</h2>
+  <p class="confirm-modal__message">{{ message() }}</p>
+
+  <div class="confirm-modal__actions">
+    <button
+      class="confirm-modal__btn confirm-modal__cancel"
+      type="button"
+      (click)="dismiss()"
+    >
+      {{ cancelLabel() }}
+    </button>
+    <button
+      class="confirm-modal__btn confirm-modal__confirm"
+      type="button"
+      (click)="confirm()"
+    >
+      {{ confirmLabel() }}
+    </button>
+  </div>
+</div>

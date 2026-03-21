@@ -17,3 +17,15 @@ body {
 html, body {
   height: 100%;
 }
+
+/* ── CDK Dialog overlay ─────────────────────────────────────────────────── */
+.dialog-backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Center the panel in the viewport */
+.cdk-overlay-pane.dialog-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,81 @@
+<form [formGroup]="formRef" (ngSubmit)="save()">
+  <h2 class="user-form__title">{{ isEditMode ? 'Edit User' : 'Add User' }}</h2>
+
+  <div class="user-form__row">
+    <label class="user-form__field">
+      First name
+      <input
+        type="text"
+        formControlName="firstName"
+        placeholder="Jane"
+        autocomplete="given-name"
+      />
+      @if (formRef.firstNameCtrl.invalid && formRef.firstNameCtrl.touched) {
+        <span class="user-form__error">
+          @if (formRef.firstNameCtrl.hasError('required')) { First name is required. }
+          @else if (formRef.firstNameCtrl.hasError('minlength')) { At least 2 characters. }
+        </span>
+      }
+    </label>
+
+    <label class="user-form__field">
+      Last name
+      <input
+        type="text"
+        formControlName="lastName"
+        placeholder="Doe"
+        autocomplete="family-name"
+      />
+      @if (formRef.lastNameCtrl.invalid && formRef.lastNameCtrl.touched) {
+        <span class="user-form__error">
+          @if (formRef.lastNameCtrl.hasError('required')) { Last name is required. }
+          @else if (formRef.lastNameCtrl.hasError('minlength')) { At least 2 characters. }
+        </span>
+      }
+    </label>
+  </div>
+
+  <label class="user-form__field">
+    Email
+    <input
+      type="email"
+      formControlName="email"
+      placeholder="jane.doe@example.com"
+      autocomplete="email"
+    />
+    @if (formRef.emailCtrl.invalid && formRef.emailCtrl.touched) {
+      <span class="user-form__error">
+        @if (formRef.emailCtrl.hasError('required')) { Email is required. }
+        @else if (formRef.emailCtrl.hasError('email')) { Enter a valid email address. }
+      </span>
+    }
+  </label>
+
+  <div class="user-form__row">
+    <label class="user-form__field">
+      Role
+      <select formControlName="role">
+        <option value="viewer">Viewer</option>
+        <option value="editor">Editor</option>
+        <option value="admin">Admin</option>
+      </select>
+    </label>
+
+    <label class="user-form__field">
+      Status
+      <select formControlName="status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="user-form__actions">
+    <button type="button" class="user-form__btn user-form__btn--cancel" (click)="cancel()">
+      Cancel
+    </button>
+    <button type="submit" class="user-form__btn user-form__btn--submit">
+      {{ isEditMode ? 'Save changes' : 'Add user' }}
+    </button>
+  </div>
+</form>

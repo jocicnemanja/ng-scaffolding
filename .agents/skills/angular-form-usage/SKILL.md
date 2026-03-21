@@ -187,9 +187,52 @@ const payload = form.getRawValue();
 
 ---
 
+## `fromResponse` Pattern
+
+Add a `fromResponse(data: MyModel | null): void` **instance method** on the form class to handle
+both create and edit modes. Use an early return (guard clause) for the null case.
+
+```ts
+/**
+ * Populates the form from an API / store response.
+ * Resets to defaults when data is null (create mode).
+ */
+fromResponse(user: User | null): void {
+  if (!user) {
+    this.reset();
+    return;
+  }
+
+  this.patchValue({
+    firstName: user.firstName,
+    lastName:  user.lastName,
+    email:     user.email,
+    role:      user.role,
+    status:    user.status,
+  });
+}
+```
+
+Call it from the component's `effect()` so the form stays in sync with the signal input:
+
+```ts
+constructor() {
+  effect(() => this.formRef.fromResponse(this.user()));
+}
+```
+
+Rules:
+- Always `| null` in the signature — covers both create (`null`) and edit (`data`) modes
+- Call `this.reset()` on null — clears all controls back to their `nonNullable` defaults
+- Use `patchValue` (not `setValue`) so partial updates are safe
+- Never call `patchValue` directly in the component — delegate to `fromResponse`
+
+---
+
 ## Do Not
 
 - **Do not** use `UntypedFormBuilder` / `UntypedFormGroup` in new code — use typed `FormGroup` / `FormControl`
 - **Do not** put form definitions inside components — keep them in separate `*.form.ts` files
 - **Do not** use `formRef.value` directly as a payload — use `getRawValue()` or define a `toPayload` getter
 - **Do not** use `formRef.get('field')` in templates — use typed getters in the component class
+- **Do not** call `patchValue` / `reset` directly in the component — use `fromResponse` instead
