@@ -29,6 +29,8 @@ export class UsersStore {
       this.error.set(null);
     }),
     switchMap(() => timer(400).pipe(map(() => MOCK_USERS))),
+    tap(() => this.loading.set(false)),
+    takeUntilDestroyed(), 
   );
 
   private readonly users = toSignal(this.users$, { initialValue: [] });
@@ -136,6 +138,6 @@ export class UsersStore {
 export const USERS_STORE = new InjectionToken<UsersStore>('USERS_STORE');
 
 export const USERS_STORE_FACTORY = {
-  provide: UsersStore,
+  provide: USERS_STORE,
   useFactory: () => new UsersStore(),
 };
