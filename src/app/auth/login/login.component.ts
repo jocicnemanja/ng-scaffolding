@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 import { LoginForm } from './login.form';
 
 @Component({
-  selector: 'app-login',
+  selector: 'kim-login',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, RouterLink],
   host: { 'class': 'auth-page' },

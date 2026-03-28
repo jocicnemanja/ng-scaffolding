@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, output, computed } from '@angular/core';
 
 @Component({
-  selector: 'app-pagination',
+  selector: 'kim-pagination',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'class': 'pagination' },
   templateUrl: './pagination.component.html',

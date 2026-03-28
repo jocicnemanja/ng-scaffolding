@@ -11,17 +11,17 @@ export interface UserFormDialogData {
 }
 
 @Component({
-  selector: 'app-user-form-dialog',
+  selector: 'kim-user-form-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DialogShell, UserFormComponent],
   template: `
-    <app-dialog-shell [config]="shellConfig" (closed)="cancel()">
-      <app-user-form
+    <kim-dialog-shell [config]="shellConfig" (closed)="cancel()">
+      <kim-user-form
         [user]="data.user"
         (saved)="save($event)"
         (cancelled)="cancel()"
       />
-    </app-dialog-shell>
+    </kim-dialog-shell>
   `,
 })
 export class UserFormDialogComponent {

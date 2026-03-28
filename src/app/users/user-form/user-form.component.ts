@@ -4,7 +4,7 @@ import { User } from '../user.model';
 import { UserForm, UserFormPayload } from './user.form';
 
 @Component({
-  selector: 'app-user-form',
+  selector: 'kim-user-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule],
   host: { 'class': 'user-form' },

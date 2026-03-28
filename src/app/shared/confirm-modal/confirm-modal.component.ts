@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-confirm-modal',
+  selector: 'kim-confirm-modal',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'confirm-modal',

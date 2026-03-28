@@ -8,7 +8,7 @@ export interface NavItem {
 }
 
 @Component({
-  selector: 'app-side-nav',
+  selector: 'kim-side-nav',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive],
   host: {

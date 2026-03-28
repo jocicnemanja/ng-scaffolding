@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'app-table',
+  selector: 'kim-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'class': 'table-wrapper' },
   templateUrl: './table.component.html',

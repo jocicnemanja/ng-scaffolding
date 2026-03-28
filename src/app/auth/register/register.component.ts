@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 import { RegisterForm } from './register.form';
 
 @Component({
-  selector: 'app-register',
+  selector: 'kim-register',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, RouterLink],
   host: { 'class': 'auth-page' },

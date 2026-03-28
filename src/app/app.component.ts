@@ -5,7 +5,7 @@ import { SideNav, NavItem } from './shared/side-nav/side-nav.component';
 import { AuthService } from './auth/auth.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'kim-root',
   imports: [RouterOutlet, Header, SideNav],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

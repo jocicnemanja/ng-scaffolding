@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, output, signal } from '@angular/core';
 
 @Component({
-  selector: 'app-filter',
+  selector: 'kim-filter',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'class': 'filter' },
   templateUrl: './filter.component.html',

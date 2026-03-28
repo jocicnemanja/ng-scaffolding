@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input, output, inject, computed } f
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'kim-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'header',

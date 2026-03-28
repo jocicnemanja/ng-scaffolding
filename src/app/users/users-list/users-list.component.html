@@ -1,6 +1,6 @@
 <header class="page-header">
   <h1>Users</h1>
-  <app-filter placeholder="Filter users..." (filterChange)="store.setFilter($event)" />
+  <kim-filter placeholder="Filter users..." (filterChange)="store.setFilter($event)" />
   <button class="btn-add" type="button" (click)="store.save(null)">+ Add User</button>
 </header>
 
@@ -14,7 +14,7 @@
     <button (click)="store.reload()">Retry</button>
   </div>
 } @else {
-  <app-table>
+  <kim-table>
     <ng-container table-header>
       <th>Name</th>
       <th>Email</th>
@@ -44,10 +44,10 @@
         </tr>
       }
     </ng-container>
-  </app-table>
+  </kim-table>
 
   @if (store.totalItems() > 0) {
-    <app-pagination
+    <kim-pagination
       [currentPage]="store.currentPage()"
       [totalItems]="store.totalItems()"
       [pageSize]="store.pageSize"

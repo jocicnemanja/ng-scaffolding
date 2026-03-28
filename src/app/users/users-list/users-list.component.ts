@@ -5,7 +5,7 @@ import { Filter } from '../../shared/filter/filter.component';
 import { USERS_STORE, USERS_STORE_FACTORY, UsersStore } from '../users.store';
 
 @Component({
-  selector: 'app-users-list',
+  selector: 'kim-users-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Table, Pagination, Filter],
   providers: [USERS_STORE_FACTORY],

@@ -7,7 +7,7 @@ import { DialogConfig } from './dialog.model';
  * feature-specific dialog component that wraps this shell.
  */
 @Component({
-  selector: 'app-dialog-shell',
+  selector: 'kim-dialog-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'class': 'dialog-shell' },
   templateUrl: './dialog.component.html',
