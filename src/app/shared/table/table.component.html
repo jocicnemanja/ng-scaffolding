@@ -85,9 +85,9 @@
     }
   </main>
   @let _footerRef = footerRef();
-  @if (provider.totalPages() > 1 || _footerRef) {
+  @if (provider.totalPages() > 0 || _footerRef) {
     <footer>
-      @if (provider.totalPages() > 1) {
+      @if (provider.totalPages() > 0) {
         <kim-pagination
           [currentPage]="provider.page()"
           [totalItems]="provider.total()"
