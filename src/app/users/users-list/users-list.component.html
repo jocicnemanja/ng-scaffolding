@@ -1,30 +1,21 @@
-<header class="page-header">
-  <h1>Users</h1>
-  <kim-filter placeholder="Filter users..." (filterChange)="store.setFilter($event)" />
-  <button class="btn-add" type="button" (click)="store.save(null)">+ Add User</button>
-</header>
-
-@let _isLoading = store.isLoading();
-
-@if (_isLoading) {
-  <div class="loading-state">Loading users…</div>
-} @else if (store.hasError()) {
-  <div class="error-state">
-    {{ store.errorMessage() }}
-    <button (click)="store.reload()">Retry</button>
-  </div>
-} @else {
+  a:{{provider.providerName()}}
+  e {{provider.entities() | json}}
+  @let a = provider.refresh();
   <kim-table>
-    <ng-container table-header>
+    <ng-template #header>
+      <h2>Users</h2>
+      <button >Add User</button>
+    </ng-template>    
+    <ng-template #headerColumns>
       <th>Name</th>
       <th>Email</th>
       <th>Role</th>
       <th>Status</th>
       <th></th>
-    </ng-container>
+    </ng-template>
 
-    <ng-container table-body>
-      @for (user of store.paginatedUsers(); track user.id) {
+    <ng-template #row let-user>
+      @for (user of provider.entities(); track user.id) {
         <tr>
           <td>{{ user.firstName }} {{ user.lastName }}</td>
           <td>{{ user.email }}</td>
@@ -35,23 +26,10 @@
             <span class="status" [class]="'status--' + user.status">{{ user.status }}</span>
           </td>
           <td class="actions-cell">
-            <button class="btn-edit" type="button" (click)="store.save(user)">Edit</button>
+            <button class="btn-edit" type="button" >Edit</button>
+            <button class="btn-delete" type="button" >Delete</button>
           </td>
         </tr>
-      } @empty {
-        <tr>
-          <td colspan="5" class="empty-state">No users found.</td>
-        </tr>
       }
-    </ng-container>
+    </ng-template>
   </kim-table>
-
-  @if (store.totalItems() > 0) {
-    <kim-pagination
-      [currentPage]="store.currentPage()"
-      [totalItems]="store.totalItems()"
-      [pageSize]="store.pageSize"
-      (pageChange)="store.setPage($event)"
-    />
-  }
-}

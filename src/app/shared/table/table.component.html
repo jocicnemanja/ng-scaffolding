@@ -1,10 +1,105 @@
-<table>
-  <thead>
-    <tr>
-      <ng-content select="[table-header]" />
-    </tr>
-  </thead>
-  <tbody>
-    <ng-content select="[table-body]" />
-  </tbody>
-</table>
+@let _isLoading = provider.isLoading();
+<section class="__grid">
+  @let _configuration = configuration();
+  @let _hasOptions =
+    _configuration.showRefresh || _configuration.canExport || _configuration.canFullscreen;
+  @let _headerRef = headerRef();
+  @if (_headerRef || _hasOptions) {
+    <header>
+      @if (_headerRef) {
+        <section class="__header">
+          <ng-container *ngTemplateOutlet="_headerRef"></ng-container>
+        </section>
+      }
+      @if (_hasOptions) {
+        <div class="__common">
+          @if (_configuration.showRefresh) {
+            <button class="oiq-button oiq-button--link __tool" (click)="provider.refresh()">
+              <span class="material-symbols-outlined">refresh</span>
+            </button>
+          }
+          @if (_configuration.canExport) {
+            <button
+              class="oiq-button oiq-button--link __tool"
+              (click)="downloadCsv()"
+            >
+              <span class="material-symbols-outlined">download</span>
+            </button>
+          }
+          @if (_configuration.canFullscreen) {
+            <button class="oiq-button oiq-button--link __tool" (click)="toggleFullScreen()">
+              <span class="material-symbols-outlined">{{
+                isFullScreen ? 'fullscreen_exit' : 'fullscreen'
+              }}</span>
+            </button>
+          }
+        </div>
+      }
+    </header>
+  }
+  <main>
+    @let _rows = provider.entities();
+    @if (!_isLoading && (!_rows || !_rows.length)) {
+      @let _noItemsRef = noItemsRef();
+      @if (_noItemsRef) {
+        <ng-container *ngTemplateOutlet="_noItemsRef"></ng-container>
+      } @else if (_configuration.noItemsTitle || _configuration.noItemsMessage) {
+        <div class="__empty">
+          <div>
+            <i class="ph ph-inbox"></i>
+            <h4>{{ _configuration.noItemsTitle }}</h4>
+            <p>{{ _configuration.noItemsMessage }}</p>
+          </div>
+        </div>
+      }
+    } @else if (_rows && _rows.length) {
+      <table
+        class="oiq-table"
+        [class.__bordered]="_configuration.bordered"
+        [class.__bordered-cells]="_configuration.borderedCells"
+        [class.__bordered-headers]="_configuration.borderedHeaders"
+        [class.__bordered-vertical]="_configuration.borderedVertical"
+        [class.__striped]="_configuration.striped"
+        [class.__colored]="_configuration.colored"
+      >
+        @if (headerColumnsRef(); as _headerColumnsRef) {
+          <thead>
+            <ng-container *ngTemplateOutlet="_headerColumnsRef"></ng-container>
+          </thead>
+        }
+        <tbody>
+          @let _rowRef = rowRef();
+          @for (row of _rows; track trackByFn(i, row); let i = $index) {
+            <ng-container
+              *ngTemplateOutlet="_rowRef; context: { $implicit: row, idx: i }"
+            ></ng-container>
+          }
+        </tbody>
+        @let _footerColumnsRef = footerColumnsRef();
+        @if (_footerColumnsRef) {
+          <tfoot>
+            <ng-container *ngTemplateOutlet="_footerColumnsRef"></ng-container>
+          </tfoot>
+        }
+      </table>
+    }
+  </main>
+  @let _footerRef = footerRef();
+  @if (provider.totalPages() > 1 || _footerRef) {
+    <footer>
+      @if (provider.totalPages() > 1) {
+        <kim-pagination
+          [currentPage]="provider.page()"
+          [totalItems]="provider.total()"
+          [pageSize]="provider.pageSize()"
+          (pageChange)="provider.goToPage($event)"
+        />
+      }
+      @if (_footerRef) {
+        <div class="__footer">
+          <ng-container *ngTemplateOutlet="_footerRef"></ng-container>
+        </div>
+      }
+    </footer>
+  }
+</section>
