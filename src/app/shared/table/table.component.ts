@@ -8,7 +8,10 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { Pagination } from '../pagination/pagination.component';
-import { BASE_GRID_PROVIDER } from '../grid-providers/base-signal-store-grid.provider';
+import {
+  BASE_GRID_PROVIDER,
+  BaseGridProvider,
+} from '../grid-providers/base-signal-grid.provider';
 
 @Component({
   selector: 'kim-table',
@@ -22,7 +25,7 @@ import { BASE_GRID_PROVIDER } from '../grid-providers/base-signal-store-grid.pro
   imports: [NgTemplateOutlet, Pagination],
 })
 export class Table {
-  protected readonly provider = inject(BASE_GRID_PROVIDER);
+  protected readonly provider = inject<BaseGridProvider>(BASE_GRID_PROVIDER);
 
   headerRef = contentChild<TemplateRef<any>>('header');
   headerColumnsRef = contentChild<TemplateRef<any>>('headerColumns');

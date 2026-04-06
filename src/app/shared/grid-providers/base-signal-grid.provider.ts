@@ -320,9 +320,9 @@ function buildError(err: unknown): TableError {
 
 // ── Provider interface for the table component ───────────────────────────────
 
-export interface BaseGridProvider {
+export interface BaseGridProvider<T extends { id: string } = { id: string }> {
   // State signals
-  entities: Signal<{ id: string }[]>;
+  entities: Signal<T[]>;
   isLoading: Signal<boolean>;
   sort: Signal<SortState | null>;
   page: Signal<number>;
@@ -334,10 +334,10 @@ export interface BaseGridProvider {
   errors: Signal<TableError[]>;
   selectedIds: Signal<ReadonlySet<string>>;
   activeId: Signal<string | null>;
-  selectedEntities: Signal<{ id: string }[]>;
+  selectedEntities: Signal<T[]>;
   isAllSelected: Signal<boolean>;
   isIndeterminate: Signal<boolean>;
-  activeEntity: Signal<{ id: string } | null>;
+  activeEntity: Signal<T | null>;
   params: Signal<LoadParams>;
 
   // Methods
