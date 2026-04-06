@@ -1,4 +1,4 @@
-import { computed, InjectionToken, Signal } from '@angular/core';
+import { computed, effect, InjectionToken, Signal } from '@angular/core';
 import {
   signalStoreFeature,
   withState,
@@ -6,6 +6,8 @@ import {
   withMethods,
   withHooks,
   patchState,
+  getState,
+  signalStore,
 } from '@ngrx/signals';
 import {
   withEntities,
@@ -83,7 +85,7 @@ export interface PageResult<T> {
  *   store.isIndeterminate() — boolean (for checkbox tri-state)
  *   store.activeEntity()    — T | null
  */
-export function withBaseTable<T extends { id: string }>() {
+export function withBaseStore<T extends { id: string }>() {
   return signalStoreFeature(
 
     // ── 1. Normalized entity collection ──────────────────────────────────
@@ -299,6 +301,11 @@ export function withBaseTable<T extends { id: string }>() {
         // Connect the Subject → rxMethod pipeline, then seed the first load
         (store as any)._connectPipeline();
         (store as any).refresh();
+             effect(() => {
+        // 👇 The effect is re-executed on state change.
+        const state = getState(store);
+        console.log('counter state', state);
+      });
       },
     }),
   );
@@ -320,7 +327,7 @@ function buildError(err: unknown): TableError {
 
 // ── Provider interface for the table component ───────────────────────────────
 
-export interface BaseGridProvider<T extends { id: string } = { id: string }> {
+export interface IBaseStore<T extends { id: string } = { id: string }> {
   // State signals
   entities: Signal<T[]>;
   isLoading: Signal<boolean>;
@@ -357,9 +364,9 @@ export interface BaseGridProvider<T extends { id: string } = { id: string }> {
   setActive: (id: string | null) => void;
 }
 
-const BaseGridProvder = signalStoreFeature(
-  withBaseTable(),
+export const BaseStore = signalStore(
+  withBaseStore(),
 );
 
-export const BASE_GRID_PROVIDER = new InjectionToken<BaseGridProvider>('BASE_GRID_PROVIDER');
-export const BASE_GRID_PROVIDER_FACTORY = () => ({ provide: BASE_GRID_PROVIDER, useValue: BaseGridProvder });
+// export const BASE_GRID_PROVIDER = new InjectionToken<BaseGridProvider>('BASE_GRID_PROVIDER');
+// export const BASE_GRID_PROVIDER_FACTORY = () => ({ provide: BASE_GRID_PROVIDER, useValue: BaseGridProvder });

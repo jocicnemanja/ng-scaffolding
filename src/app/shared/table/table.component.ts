@@ -9,13 +9,13 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 import { Pagination } from '../pagination/pagination.component';
 import {
-  BASE_GRID_PROVIDER,
-  BaseGridProvider,
+  BaseStore,
 } from '../grid-providers/base-signal-grid.provider';
 
 @Component({
   selector: 'kim-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BaseStore],
   host: {
     'class': 'table-wrapper',
     '[class.__fullscreen]': 'isFullScreen',
@@ -25,7 +25,10 @@ import {
   imports: [NgTemplateOutlet, Pagination],
 })
 export class Table {
-  protected readonly provider = inject<BaseGridProvider>(BASE_GRID_PROVIDER);
+  provider = inject(BaseStore, {
+    skipSelf: true,
+    optional: true,
+  }) ?? inject(BaseStore);
 
   headerRef = contentChild<TemplateRef<any>>('header');
   headerColumnsRef = contentChild<TemplateRef<any>>('headerColumns');

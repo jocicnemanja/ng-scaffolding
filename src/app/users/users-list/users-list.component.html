@@ -1,12 +1,10 @@
-  a:{{provider.providerName()}}
-  e {{provider.entities() | json}}
-  @let a = provider.refresh();
   <kim-table>
     <ng-template #header>
       <h2>Users</h2>
       <button >Add User</button>
     </ng-template>    
     <ng-template #headerColumns>
+      <th>id</th>
       <th>Name</th>
       <th>Email</th>
       <th>Role</th>
@@ -15,21 +13,21 @@
     </ng-template>
 
     <ng-template #row let-user>
-      @for (user of provider.entities(); track user.id) {
-        <tr>
-          <td>{{ user.firstName }} {{ user.lastName }}</td>
-          <td>{{ user.email }}</td>
-          <td>
-            <span class="badge" [class]="'badge--' + user.role">{{ user.role }}</span>
-          </td>
-          <td>
-            <span class="status" [class]="'status--' + user.status">{{ user.status }}</span>
-          </td>
-          <td class="actions-cell">
-            <button class="btn-edit" type="button" >Edit</button>
-            <button class="btn-delete" type="button" >Delete</button>
-          </td>
-        </tr>
-      }
+      <tr>
+        <td>{{ user.id }}</td>
+
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <span class="badge" [class]="'badge--' + user.role">{{ user.role }}</span>
+        </td>
+        <td>
+          <span class="status" [class]="'status--' + user.status">{{ user.status }}</span>
+        </td>
+        <td class="actions-cell">
+          <button class="btn-edit" type="button">Edit</button>
+          <button class="btn-delete" type="button">Delete</button>
+        </td>
+      </tr>
     </ng-template>
   </kim-table>
