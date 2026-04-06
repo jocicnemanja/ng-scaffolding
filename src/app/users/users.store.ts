@@ -2,7 +2,7 @@ import { InjectionToken } from "@angular/core";
 import { signalStore, withState } from "@ngrx/signals";
 import { withMethods } from "@ngrx/signals";
 import { of } from "rxjs";
-import { IBaseStore, LoadParams, PageResult, withBaseStore } from "../shared/grid-providers/base-signal-grid.provider";
+import { IBaseStore, LoadParams, PageResult, withBaseStore } from "../shared/grid-providers/base-signal.store";
 import { MOCK_USERS, User } from "./user.model";
 
 export const UsersStore = signalStore(
