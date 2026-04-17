@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { DialogShell } from '../../shared/dialog/dialog.component';
-import { DialogConfig } from '../../shared/dialog/dialog.model';
+import { DialogShell } from '../../shared/components/dialog/dialog.component';
+import { DialogConfig } from '../../shared/components/dialog/dialog.model';
 import { UserFormComponent } from './user-form.component';
 import { UserFormPayload } from './user.form';
 import { User } from '../user.model';

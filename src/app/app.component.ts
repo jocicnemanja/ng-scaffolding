@@ -1,7 +1,7 @@
 import { Component, signal, viewChild, inject, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './shared/header/header.component';
-import { SideNav, NavItem } from './shared/side-nav/side-nav.component';
+import { Header } from './shared/components/header/header.component';
+import { SideNav, NavItem } from './shared/components/side-nav/side-nav.component';
 import { AuthService } from './auth/auth.service';
 
 @Component({

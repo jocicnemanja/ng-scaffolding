@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { Table } from '../../shared/table/table.component';
-import { BaseStore } from '../../shared/grid-providers/base-signal.store';
+import { Table } from '../../shared/components/table/table.component';
+import { BaseStore } from '../../shared/grid-store/base-signal.store';
 import { UsersStore } from '../users.store';
 
 @Component({

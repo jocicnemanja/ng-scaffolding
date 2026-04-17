@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, output, inject, computed } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'kim-header',

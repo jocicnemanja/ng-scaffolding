@@ -10,7 +10,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Pagination } from '../pagination/pagination.component';
 import {
   BaseStore,
-} from '../grid-providers/base-signal.store';
+} from '../../grid-store/base-signal.store';
 
 @Component({
   selector: 'kim-table',
