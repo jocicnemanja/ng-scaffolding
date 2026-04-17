@@ -89,8 +89,6 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   protected readonly state: WritableSignal<GridState<T>> = signal({
     entities: [],
     query: {
-      page: 1,
-      size: 25,
       sort: [],
       filters: {},
     },

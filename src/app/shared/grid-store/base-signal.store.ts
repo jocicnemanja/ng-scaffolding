@@ -1,4 +1,4 @@
-import { computed, effect, InjectionToken, Signal } from '@angular/core';
+import { computed, effect, Signal } from '@angular/core';
 import {
   signalStoreFeature,
   withState,
@@ -18,71 +18,48 @@ import {
 } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { pipe, Subject, Observable } from 'rxjs';
+import { pipe, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
   switchMap,
   finalize,
 } from 'rxjs/operators';
+import { GridError, QueryState, PaginationState } from './gird.models';
+import { PageResponse } from '../models/page-response.models';
+import { buildError } from '../utils/http-request.utils';
 
-// ── Public types ──────────────────────────────────────────────────────────────
-
-export interface SortState {
-  field: string;
-  direction: 'asc' | 'desc';
-}
-
-export interface TableError {
-  id: string;
-  message: string;
-  timestamp: number;
-  context?: unknown;
-}
-
-export interface LoadParams {
-  sort:     SortState | null;
-  page:     number;
-  pageSize: number;
-  filter:   Record<string, unknown>;
-}
-
-export interface PageResult<T> {
-  data:  T[];
-  total: number;
-}
-
-// ── withBaseTable ─────────────────────────────────────────────────────────────
+// ── withBaseStore ─────────────────────────────────────────────────────────────
 
 /**
- * withBaseTable<T>
+ * withBaseStore<T>
  *
- * Composable SignalStore feature. Wire it into any signalStore() call
- * alongside a withMethods block that provides fetchPage():
+ * Composable SignalStore feature aligned with GridStore.
+ * Wire it into any signalStore() call alongside a withMethods block
+ * that provides fetchPage():
  *
  *   export const UsersStore = signalStore(
- *     withBaseTable<User>(),
- *     withMethods((store) => ({
- *       fetchPage: (p: LoadParams) => inject(UsersApi).getPage(p),
+ *     withMethods(() => ({
+ *       fetchPage: (query: QueryState, pagination: PaginationState) =>
+ *         inject(UsersApi).getPage(query, pagination),
  *     })),
+ *     withBaseStore<User>(),
  *   );
  *
- * Everything the template needs comes off the store directly:
- *   store.entities()        — T[] from normalized entity collection
- *   store.isLoading()       — boolean (counter-safe)
- *   store.sort()            — SortState | null
- *   store.page()            — number
- *   store.pageSize()        — number
- *   store.total()           — number
+ * Exposed signals (mirrors GridStore):
+ *   store.entities()        — T[]
+ *   store.isLoading()       — boolean
+ *   store.query()           — QueryState
+ *   store.pagination()      — PaginationState
  *   store.totalPages()      — number
  *   store.hasNext()         — boolean
  *   store.hasPrev()         — boolean
- *   store.errors()          — TableError[]
+ *   store.errors()          — GridError[]
  *   store.selectedIds()     — ReadonlySet<string>
  *   store.activeId()        — string | null
  *   store.selectedEntities()— T[]
  *   store.isAllSelected()   — boolean
- *   store.isIndeterminate() — boolean (for checkbox tri-state)
+ *   store.isIndeterminate() — boolean
  *   store.activeEntity()    — T | null
  */
 export function withBaseStore<T extends { id: string }>() {
@@ -93,16 +70,20 @@ export function withBaseStore<T extends { id: string }>() {
 
     // ── 2. Non-entity state slices ────────────────────────────────────────
     withState({
-      sort:           null as SortState | null,
-      page:           1,
-      pageSize:       25,
-      total:          0,
-      filter:         {} as Record<string, unknown>,
-      loadingCounter: 0,
-      errors:         [] as TableError[],
-      // Selection
-      selectedIds:    new Set<string>() as ReadonlySet<string>,
-      activeId:       null as string | null,
+    query: {
+      sort: [] as QueryState['sort'],
+      filters: {} as QueryState['filters'],
+    },
+    pagination: {
+      page: 1,
+      size: 25,
+      totalItems: 0,
+      totalPages: 0,
+    },
+    loadingCounter: 0,
+    errors: [] as GridError[],
+    selectedIds: new Set<string>(),
+    activeId: null as string | null,
     }),
 
     // ── 3a. Computed (base) ──────────────────────────────────────────────
@@ -110,23 +91,16 @@ export function withBaseStore<T extends { id: string }>() {
       isLoading: computed(() => store.loadingCounter() > 0),
 
       totalPages: computed(() => {
-        const ps = store.pageSize();
-        return ps === 0 ? 1 : Math.ceil(store.total() / ps);
+        const ps = store.pagination().size;
+        return ps === 0 ? 1 : Math.ceil(store.pagination().totalItems / ps);
       }),
-
-      params: computed<LoadParams>(() => ({
-        sort:     store.sort(),
-        page:     store.page(),
-        pageSize: store.pageSize(),
-        filter:   store.filter(),
-      })),
     })),
 
     // ── 3b. Computed (derived — needs totalPages on store) ────────────
     withComputed((store) => {
       return {
-        hasNext: computed(() => store.page() < store.totalPages()),
-        hasPrev: computed(() => store.page() > 1),
+        hasNext: computed(() => store.pagination().page < store.totalPages()),
+        hasPrev: computed(() => store.pagination().page > 1),
 
         // ── Selection derived ───────────────────────────────────────────
 
@@ -155,28 +129,36 @@ export function withBaseStore<T extends { id: string }>() {
     // ── 4. Methods ────────────────────────────────────────────────────────
     withMethods((store) => {
 
-      // Internal push bus — carries LoadParams snapshots to the pipeline
-      const load$ = new Subject<LoadParams>();
+      type LoadSnapshot = { query: QueryState; pagination: PaginationState };
 
-      const _push = () => load$.next(store.params());
+      // Internal push bus — carries query+pagination snapshots to the pipeline
+      const load$ = new Subject<LoadSnapshot>();
+
+      const _push = () => load$.next({ query: store.query(), pagination: store.pagination() });
 
       // rxMethod: debounce → dedup → switchMap → fetchPage (provided by subclass)
-      const _load = rxMethod<LoadParams>(
+      const _load = rxMethod<LoadSnapshot>(
         pipe(
           debounceTime(0),
           distinctUntilChanged(
             (a, b) => JSON.stringify(a) === JSON.stringify(b),
           ),
-          switchMap((params) => {
+          switchMap(({ query, pagination }) => {
             patchState(store, { loadingCounter: store.loadingCounter() + 1 });
 
-            return (store as any).fetchPage(params).pipe(
+            return (store as any).fetchPage(query, pagination).pipe(
               tapResponse({
-                next: (result: PageResult<T>) => {
+                next: (result: PageResponse<T>) => {
                   patchState(
                     store,
-                    setAllEntities(result.data as T[]),
-                    { total: result.total },
+                    setAllEntities(result.content as T[]),
+                    {
+                      pagination: {
+                        ...store.pagination(),
+                        totalItems: result.totalElements,
+                        totalPages: result.totalPages,
+                      },
+                    },
                   );
                 },
                 error: (err: unknown) => {
@@ -204,30 +186,30 @@ export function withBaseStore<T extends { id: string }>() {
 
         // ── Load commands ───────────────────────────────────────────────
 
-        refresh() { _push(); },
+        reload() { _push(); },
 
-        setSort(sort: SortState) {
-          patchState(store, { sort, page: 1 });
+        setSort(sort: QueryState['sort'][number]) {
+          patchState(store, { query: { ...store.query(), sort: [sort] }, pagination: { ...store.pagination(), page: 1 } });
           _push();
         },
 
         goToPage(page: number) {
-          patchState(store, { page });
+          patchState(store, { pagination: { ...store.pagination(), page } });
           _push();
         },
 
         setPageSize(pageSize: number) {
-          patchState(store, { pageSize, page: 1 });
+          patchState(store, { pagination: { ...store.pagination(), size: pageSize, page: 1 } });
           _push();
         },
 
-        setFilter(patch: Record<string, unknown>) {
-          patchState(store, { filter: { ...store.filter(), ...patch }, page: 1 });
+        setFilter(patch: Record<string, string>) {
+          patchState(store, { query: { ...store.query(), filters: { ...store.query().filters, ...patch } }, pagination: { ...store.pagination(), page: 1 } });
           _push();
         },
 
         resetFilter() {
-          patchState(store, { filter: {}, page: 1 });
+          patchState(store, { query: { ...store.query(), filters: {} }, pagination: { ...store.pagination(), page: 1 } });
           _push();
         },
 
@@ -276,7 +258,7 @@ export function withBaseStore<T extends { id: string }>() {
 
         addEntity(entity: T) {
           patchState(store, addEntity(entity));
-          patchState(store, { total: store.total() + 1 });
+          patchState(store, { pagination: { ...store.pagination(), totalItems: store.pagination().totalItems + 1 } });
         },
 
         _patchEntity(id: string, patch: Partial<T>) {
@@ -285,12 +267,12 @@ export function withBaseStore<T extends { id: string }>() {
 
         _removeEntity(id: string) {
           patchState(store, removeEntity(id));
-          patchState(store, { total: Math.max(0, store.total() - 1) });
+          patchState(store, { pagination: { ...store.pagination(), totalItems: Math.max(0, store.pagination().totalItems - 1) } });
         },
 
         _setAllEntities(entities: T[], total?: number) {
           patchState(store, setAllEntities(entities));
-          if (total !== undefined) patchState(store, { total });
+          if (total !== undefined) patchState(store, { pagination: { ...store.pagination(), totalItems: total } });
         },
       };
     }),
@@ -300,7 +282,7 @@ export function withBaseStore<T extends { id: string }>() {
       onInit(store) {
         // Connect the Subject → rxMethod pipeline, then seed the first load
         (store as any)._connectPipeline();
-        (store as any).refresh();
+        (store as any).reload();
              effect(() => {
         // 👇 The effect is re-executed on state change.
         const state = getState(store);
@@ -311,48 +293,31 @@ export function withBaseStore<T extends { id: string }>() {
   );
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-function buildError(err: unknown): TableError {
-  return {
-    id: crypto.randomUUID(),
-    message:
-      err instanceof Error     ? err.message
-      : typeof err === 'string'  ? err
-      : 'An unexpected error occurred.',
-    timestamp: Date.now(),
-    context: err,
-  };
-}
-
 // ── Provider interface for the table component ───────────────────────────────
 
 export interface IBaseStore<T extends { id: string } = { id: string }> {
   // State signals
   entities: Signal<T[]>;
   isLoading: Signal<boolean>;
-  sort: Signal<SortState | null>;
-  page: Signal<number>;
-  pageSize: Signal<number>;
-  total: Signal<number>;
+  query: Signal<QueryState>;
+  pagination: Signal<PaginationState>;
   totalPages: Signal<number>;
   hasNext: Signal<boolean>;
   hasPrev: Signal<boolean>;
-  errors: Signal<TableError[]>;
+  errors: Signal<GridError[]>;
   selectedIds: Signal<ReadonlySet<string>>;
   activeId: Signal<string | null>;
   selectedEntities: Signal<T[]>;
   isAllSelected: Signal<boolean>;
   isIndeterminate: Signal<boolean>;
   activeEntity: Signal<T | null>;
-  params: Signal<LoadParams>;
 
   // Methods
-  refresh: () => void;
-  setSort: (sort: SortState) => void;
+  reload: () => void;
+  setSort: (sort: QueryState['sort'][number]) => void;
   goToPage: (page: number) => void;
   setPageSize: (pageSize: number) => void;
-  setFilter: (patch: Record<string, unknown>) => void;
+  setFilter: (patch: Record<string, string>) => void;
   resetFilter: () => void;
   clearErrors: () => void;
   dismissError: (id: string) => void;

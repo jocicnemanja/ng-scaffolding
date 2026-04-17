@@ -14,7 +14,7 @@
       @if (_hasOptions) {
         <div class="__common">
           @if (_configuration.showRefresh) {
-            <button class="oiq-button oiq-button--link __tool" (click)="provider.refresh()">
+            <button class="oiq-button oiq-button--link __tool" (click)="provider.reload()">
               <span class="material-symbols-outlined">refresh</span>
             </button>
           }
@@ -89,9 +89,9 @@
     <footer>
       @if (provider.totalPages() > 0) {
         <kim-pagination
-          [currentPage]="provider.page()"
-          [totalItems]="provider.total()"
-          [pageSize]="provider.pageSize()"
+          [currentPage]="provider.pagination().page"
+          [totalItems]="provider.pagination().totalItems"
+          [pageSize]="provider.pagination().size"
           (pageChange)="provider.goToPage($event)"
         />
       }
