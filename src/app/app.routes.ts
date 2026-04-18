@@ -8,4 +8,5 @@ export const routes: Routes = [
   { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard.component').then(m => m.Dashboard), canActivate: [authGuard] },
   { path: 'users', loadComponent: () => import('./users/users-list/users-list.component').then(m => m.UsersList), canActivate: [authGuard] },
   { path: 'admin', loadComponent: () => import('./admin/admin.component').then(m => m.Admin), canActivate: [authGuard, adminGuard] },
+  { path: 'posts', loadComponent: () => import('./posts/posts').then(m => m.Posts), canActivate: [authGuard] },
 ];

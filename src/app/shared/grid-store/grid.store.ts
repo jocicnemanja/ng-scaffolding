@@ -13,77 +13,6 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   private readonly createAction$ = new Subject<Partial<T>>();
   private readonly updateAction$ = new Subject<T>();
   private readonly deleteAction$ = new Subject<string | number>();
-  
-
-  constructor(private readonly dataSource: GridDataSource<T, QueryState>) {
-    this.registerRead();
-
-    this.createAction$
-      .pipe(
-        switchMap((payload) => {
-          const source = this.dataSource.create?.(payload);
-          if (!source) {
-            return EMPTY;
-          }
-
-          this.incrementLoading();
-          return source.pipe(
-            tap(() => this.reload()),
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
-
-    this.updateAction$
-      .pipe(
-        switchMap((payload) => {
-          const source = this.dataSource.update?.(payload);
-          if (!source) {
-            return EMPTY;
-          }
-
-          this.incrementLoading();
-          return source.pipe(
-            tap(() => this.reload()),
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
-
-    this.deleteAction$
-      .pipe(
-        switchMap((payload) => {
-          const source = this.dataSource.delete?.(payload);
-          if (!source) {
-            return EMPTY;
-          }
-
-          this.incrementLoading();
-          return source.pipe(
-            tap(() => this.reload()),
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
-  }
 
   // ─── State ────────────────────────────────────────────────────────────────
   protected readonly state: WritableSignal<GridState<T>> = signal({
@@ -137,7 +66,7 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   });
 
   // ─── Public API ───────────────────────────────────────────────────────────
-  reload(): void {
+  refresh(): void {
     this.refresh$.next();
   }
 
@@ -178,10 +107,16 @@ export class GridStore<T extends { id: string }, TRaw = T> {
     });
   }
 
-  
+  private incrementLoading(): void {
+    this.patchState({ loadingCounter: this.loadingCounter() + 1 });
+  }
 
-  // ─── Declarative pipelines ────────────────────────────────────────────────
-  private registerRead(): void {
+  private decrementLoading(): void {
+    this.patchState({ loadingCounter: this.loadingCounter() - 1 });
+  }
+
+  constructor(private dataSource: GridDataSource<T, QueryState>) {
+
     this.refresh$
       .pipe(
         switchMap(() => {
@@ -199,13 +134,71 @@ export class GridStore<T extends { id: string }, TRaw = T> {
       .subscribe((response) => {
         this.setEntities(response.content, response.totalElements);
       });
-  }
 
-  private incrementLoading(): void {
-    this.patchState({ loadingCounter: this.loadingCounter() + 1 });
-  }
+    this.createAction$
+      .pipe(
+        switchMap((payload) => {
+          const create$ = this.dataSource.create?.(payload);
+          if (!create$) {
+            return EMPTY;
+          }
 
-  private decrementLoading(): void {
-    this.patchState({ loadingCounter: this.loadingCounter() - 1 });
+          this.incrementLoading();
+          return create$.pipe(
+            tap(() => this.refresh()),
+            catchError((err) => {
+              this.setError(buildError(err));
+              return EMPTY;
+            }),
+            finalize(() => this.decrementLoading()),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+
+    this.updateAction$
+      .pipe(
+        switchMap((payload) => {
+          const update$ = this.dataSource.update?.(payload);
+          if (!update$) {
+            return EMPTY;
+          }
+
+          this.incrementLoading();
+          return update$.pipe(
+            tap(() => this.refresh()),
+            catchError((err) => {
+              this.setError(buildError(err));
+              return EMPTY;
+            }),
+            finalize(() => this.decrementLoading()),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+
+    this.deleteAction$
+      .pipe(
+        switchMap((payload) => {
+          const delete$ = this.dataSource.delete?.(payload);
+          if (!delete$) {
+            return EMPTY;
+          }
+
+          this.incrementLoading();
+          return delete$.pipe(
+            tap(() => this.refresh()),
+            catchError((err) => {
+              this.setError(buildError(err));
+              return EMPTY;
+            }),
+            finalize(() => this.decrementLoading()),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 }
