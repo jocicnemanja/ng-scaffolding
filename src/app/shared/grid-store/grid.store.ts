@@ -115,7 +115,7 @@ export class GridStore<T extends { id: string }, TRaw = T> {
     this.patchState({ loadingCounter: this.loadingCounter() - 1 });
   }
 
-  constructor(private dataSource: GridDataSource<T, QueryState>) {
+  constructor(private dataSource: GridDataSource<T, QueryState, PaginationState>) {
 
     this.refresh$
       .pipe(

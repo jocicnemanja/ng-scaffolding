@@ -10,7 +10,7 @@ import { buildHttpParams } from "../shared/utils/http-request.utils";
 
 
 @Injectable({ providedIn: 'root' })
-export class PostsDataSource implements GridDataSource<Post, QueryState> {
+export class PostsDataSource implements GridDataSource<Post, QueryState, PaginationState> {
      httpClient = inject(HttpClient);
 
     apiUrl = 'https://jsonplaceholder.typicode.com/posts';

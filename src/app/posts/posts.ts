@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { GridStore } from '../shared/grid-store/grid.store';
 import { Post } from './posts.models';
-import { POSTS_STORE, POSTS_STORE_FACTORY } from './posts.gird-store';
+import { POSTS_STORE, POSTS_STORE_FACTORY } from './posts.store';
 
 @Component({
   selector: 'kim-posts',
