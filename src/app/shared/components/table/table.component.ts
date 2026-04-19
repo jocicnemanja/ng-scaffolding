@@ -11,11 +11,11 @@ import { Pagination } from '../pagination/pagination.component';
 import {
   BaseStore,
 } from '../../grid-store/base-signal.store';
+import { GridStore } from '../../grid-store/grid.store';
 
 @Component({
   selector: 'kim-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [BaseStore],
   host: {
     'class': 'table-wrapper',
     '[class.__fullscreen]': 'isFullScreen',
@@ -25,10 +25,9 @@ import {
   imports: [NgTemplateOutlet, Pagination],
 })
 export class Table {
-  provider = inject(BaseStore, {
-    skipSelf: true,
-    optional: true,
-  }) ?? inject(BaseStore);
+
+  store = input.required<GridStore<any>>();
+
 
   headerRef = contentChild<TemplateRef<any>>('header');
   headerColumnsRef = contentChild<TemplateRef<any>>('headerColumns');
