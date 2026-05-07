@@ -1,0 +1,13 @@
+<input
+  [type]="type()"
+  [value]="getValue()"
+  [placeholder]="placeholder()"
+  [disabled]="disabled()"
+  [attr.aria-label]="ariaLabel()"
+  [attr.maxlength]="maxLength()"
+  [class]="cssClass()"
+  class="sdk-input"
+  (change)="onInputChange($event)"
+  (input)="onInputChange($event)"
+  (blur)="onBlur($event)"
+  (focus)="onFocus($event)" />

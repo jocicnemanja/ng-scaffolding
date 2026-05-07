@@ -1,0 +1,60 @@
+@let _isLoading = store.isLoading();
+@let _rows = store.entities();
+@let _pagination = store.pagination();
+@let _totalPages = store.totalPages();
+
+<header class="page-header">
+  <h1>Users (SignalStore)</h1>
+  <div class="actions">
+    <button class="btn-secondary" type="button" (click)="store.reload()">Reload</button>
+  </div>
+</header>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (_isLoading) {
+      <tr>
+        <td colspan="5" class="loading-state">Loading…</td>
+      </tr>
+    } @else if (!_rows.length) {
+      <tr>
+        <td colspan="5" class="empty-state">No users found</td>
+      </tr>
+    } @else {
+      @for (user of _rows; track user.id) {
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge" [class]="'badge--' + user.role">{{ user.role }}</span>
+          </td>
+          <td>
+            <span class="status" [class]="'status--' + user.status">{{ user.status }}</span>
+          </td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+
+@if (_totalPages > 1) {
+  <footer class="pager">
+    <button type="button" [disabled]="!store.hasPrev()" (click)="store.goToPage(_pagination.page - 1)">
+      Prev
+    </button>
+    <span>Page {{ _pagination.page }} of {{ _totalPages }}</span>
+    <button type="button" [disabled]="!store.hasNext()" (click)="store.goToPage(_pagination.page + 1)">
+      Next
+    </button>
+  </footer>
+}

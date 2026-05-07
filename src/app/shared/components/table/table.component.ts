@@ -4,13 +4,9 @@ import {
   contentChild,
   TemplateRef,
   input,
-  inject,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { Pagination } from '../pagination/pagination.component';
-import {
-  BaseStore,
-} from '../../grid-store/base-signal.store';
 import { GridStore } from '../../grid-store/grid.store';
 
 @Component({
