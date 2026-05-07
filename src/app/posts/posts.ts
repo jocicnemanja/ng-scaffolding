@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { GridStore } from '../shared/grid-store/grid.store';
-import { Post } from './posts.models';
 import { POSTS_STORE, POSTS_STORE_FACTORY } from './posts.store';
 import { Table } from '../shared/components/table/table.component';
 

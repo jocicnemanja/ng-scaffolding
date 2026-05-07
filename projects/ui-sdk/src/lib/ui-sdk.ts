@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-ui-sdk',
+  selector: 'sdk-ui-sdk',
   imports: [],
   template: `
     <p>

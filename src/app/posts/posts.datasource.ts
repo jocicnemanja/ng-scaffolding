@@ -1,10 +1,8 @@
 import { inject, Injectable } from "@angular/core";
-import { GridDataSource, PaginationState, QueryState } from "../shared/grid-store/gird.models";
+import { GridDataSource, PaginationState, PageResponse, QueryState, buildHttpParams } from "ui-sdk";
 import { map, Observable } from "rxjs";
-import { PageResponse } from "../shared/models/page-response.models";
 import { Post } from "./posts.models";
 import { HttpClient } from "@angular/common/http";
-import { buildHttpParams } from "../shared/utils/http-request.utils";
 
 
 

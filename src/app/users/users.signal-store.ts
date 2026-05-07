@@ -1,5 +1,5 @@
 import { signalStore } from '@ngrx/signals';
-import { withBaseStore } from '../shared/grid-store/base-signal.store';
+import { withBaseStore } from 'ui-sdk';
 import { User } from './user.model';
 import { UsersDataSource } from './users.datasource';
 

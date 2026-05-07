@@ -48,7 +48,7 @@ export type SdkInputTouchedFn = () => void;
  * });
  *
  * // In your template
- * <lib-sdk-input
+ * <sdk-input
  *   formControl="name"
  *   placeholder="Enter your name"
  *   ariaLabel="Full Name"
@@ -64,11 +64,11 @@ export type SdkInputTouchedFn = () => void;
  * }
  *
  * // In template
- * <lib-sdk-input [ngModel]="inputValue()" (ngModelChange)="inputValue.set($event)" />
+ * <sdk-input [ngModel]="inputValue()" (ngModelChange)="inputValue.set($event)" />
  * ```
  */
 @Component({
-  selector: 'lib-sdk-input',
+  selector: 'sdk-input',
   imports: [FormsModule],
   providers: [
     {
@@ -96,6 +96,7 @@ export type SdkInputTouchedFn = () => void;
 
     // Bind styles to host (CSS variables from :host)
     '[style.--sdk-input-padding]': '"0.75rem 1rem"',
+    '(focusout)': 'onFocusOut($event)'
   },
 })
 export class SdkInput implements ControlValueAccessor {
@@ -164,7 +165,7 @@ export class SdkInput implements ControlValueAccessor {
    * Internal signal to track whether the input has been touched by the user.
    * @internal
    */
-  private readonly _touched = signal<boolean>(false);
+  readonly _touched = signal<boolean>(false);
 
   /**
    * ControlValueAccessor callback for value changes.
@@ -292,6 +293,10 @@ export class SdkInput implements ControlValueAccessor {
    */
   onFocus(event: FocusEvent): void {
     this.focusEvent.emit(event);
+  }
+
+  onFocusOut(event: FocusEvent): void {
+    this.onBlur(event);
   }
 
 }

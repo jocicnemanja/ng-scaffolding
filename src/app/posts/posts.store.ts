@@ -1,5 +1,5 @@
 import { inject, InjectionToken } from "@angular/core";
-import { GridStore } from "../shared/grid-store/grid.store";
+import { GridStore } from "ui-sdk";
 import { Post } from "./posts.models";
 import { PostsDataSource } from "./posts.datasource";
 

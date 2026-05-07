@@ -4,7 +4,7 @@
  */
 
 /**
- * :host selector - Styles the component host element itself (<lib-sdk-input>)
+ * :host selector - Styles the component host element itself (<sdk-input>)
  * Useful for layout, display mode, and responsive behavior at the component level
  */
 :host {
@@ -26,7 +26,7 @@
 
 /**
  * :host(.full-width) - Conditionally style when a CSS class is applied
- * Usage: <lib-sdk-input class="full-width"></lib-sdk-input>
+ * Usage: <sdk-input class="full-width"></sdk-input>
  */
 :host(.full-width) {
   width: 100%;
@@ -34,7 +34,7 @@
 
 /**
  * :host(.compact) - Compact variant
- * Usage: <lib-sdk-input class="compact"></lib-sdk-input>
+ * Usage: <sdk-input class="compact"></sdk-input>
  */
 :host(.compact) {
   --sdk-input-padding: 0.5rem 0.75rem;
@@ -43,7 +43,7 @@
 
 /**
  * :host(.large) - Large variant
- * Usage: <lib-sdk-input class="large"></lib-sdk-input>
+ * Usage: <sdk-input class="large"></sdk-input>
  */
 :host(.large) {
   --sdk-input-padding: 1rem 1.5rem;
@@ -52,7 +52,7 @@
 
 /**
  * :host([disabled]) - Style the host when disabled via attribute binding
- * Usage: <lib-sdk-input [disabled]="true"></lib-sdk-input>
+ * Usage: <sdk-input [disabled]="true"></sdk-input>
  */
 :host([disabled]) {
   opacity: 0.7;

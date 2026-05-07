@@ -1,0 +1,85 @@
+<section class="playground">
+  <header class="playground__header">
+    <h1>UI SDK Playground</h1>
+    <p>Interactive sandbox for SDK components.</p>
+  </header>
+
+  <article class="playground__panel">
+    <h2>sdk-input — variants</h2>
+
+    <div class="playground__row">
+      <label>Default</label>
+      <sdk-input placeholder="Type something..." (valueChange)="onValueChange($event)" />
+    </div>
+
+    <div class="playground__row">
+      <label>Compact</label>
+      <sdk-input class="compact" placeholder="Compact variant" />
+    </div>
+
+    <div class="playground__row">
+      <label>Large</label>
+      <sdk-input class="large" placeholder="Large variant" />
+    </div>
+
+    <div class="playground__row">
+      <label>Disabled</label>
+      <sdk-input [disabled]="true" placeholder="Disabled" />
+    </div>
+
+    <div class="playground__row">
+      <label>Email</label>
+      <sdk-input type="email" placeholder="you@example.com" />
+    </div>
+
+    <div class="playground__row">
+      <label>Password</label>
+      <sdk-input type="password" placeholder="••••••••" />
+    </div>
+
+    <p class="playground__live">Live value: <code>{{ liveValue() }}</code></p>
+  </article>
+
+  <article class="playground__panel">
+    <h2>sdk-input — reactive forms</h2>
+
+    <form [formGroup]="form" class="playground__form">
+      <div class="playground__row">
+        <label>Name</label>
+        <sdk-input
+          formControlName="name"
+          placeholder="Full name"
+          (focusEvent)="onFocus()"
+          (blurEvent)="onBlur()"
+        />
+      </div>
+
+      <div class="playground__row">
+        <label>Email</label>
+        <sdk-input formControlName="email" type="email" placeholder="email@example.com" />
+      </div>
+
+      <div class="playground__row">
+        <label>Password</label>
+        <sdk-input formControlName="password" type="password" placeholder="••••••••" />
+      </div>
+
+      <button type="button" class="playground__reset" (click)="reset()">Reset</button>
+    </form>
+
+    <pre class="playground__state">{{ form.value | json }}</pre>
+  </article>
+
+  <article class="playground__panel">
+    <h2>Recent events</h2>
+    @if (emittedEvents().length === 0) {
+      <p class="playground__empty">No events yet. Focus or blur the inputs above.</p>
+    } @else {
+      <ul class="playground__events">
+        @for (event of emittedEvents(); track event) {
+          <li>{{ event }}</li>
+        }
+      </ul>
+    }
+  </article>
+</section>

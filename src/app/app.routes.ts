@@ -10,4 +10,5 @@ export const routes: Routes = [
   { path: 'users-2', loadComponent: () => import('./users/users-list-2/users-list-2.component').then(m => m.UsersList2), canActivate: [authGuard] },
   { path: 'admin', loadComponent: () => import('./admin/admin.component').then(m => m.Admin), canActivate: [authGuard, adminGuard] },
   { path: 'posts', loadComponent: () => import('./posts/posts').then(m => m.Posts), canActivate: [authGuard] },
+  { path: 'playground', loadComponent: () => import('ui-sdk').then(m => m.Playground) },
 ];

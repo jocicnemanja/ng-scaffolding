@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { GridDataSource, PaginationState, QueryState } from '../shared/grid-store/gird.models';
-import { PageResponse } from '../shared/models/page-response.models';
+import { GridDataSource, PaginationState, PageResponse, QueryState } from 'ui-sdk';
 import { MOCK_USERS, User } from './user.model';
 
 @Injectable({ providedIn: 'root' })

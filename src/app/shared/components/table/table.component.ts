@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { Pagination } from '../pagination/pagination.component';
-import { GridStore } from '../../grid-store/grid.store';
+import { GridStore } from 'ui-sdk';
 
 @Component({
   selector: 'kim-table',
