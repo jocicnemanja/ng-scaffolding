@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { PageResponse } from "../models/page-response.models";
+import { PageResponse } from "./page-response.models";
 
 export interface GridState<T extends { id: string }> {
   entities: T[];

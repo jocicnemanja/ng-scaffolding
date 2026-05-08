@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { QueryState, PaginationState } from '../grid-store/gird.models';
+import { QueryState, PaginationState } from '../grid/gird.models';
 
 export function buildError(err: unknown) {
   return {

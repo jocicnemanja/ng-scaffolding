@@ -2,6 +2,19 @@
   Showing {{ startItem() }}–{{ endItem() }} of {{ totalItems() }}
 </div>
 
+<div class="pagination-page-size">
+  <label for="pageSizeSelect">Rows per page:</label>
+  <select
+    id="pageSizeSelect"
+    [value]="pageSize()"
+    (change)="onPageSizeChange($event)"
+  >
+    @for (size of pageSizeOptions(); track size) {
+      <option [value]="size">{{ size }}</option>
+    }
+  </select>
+</div>
+
 <div class="pagination-controls">
   <button
     (click)="goToPage(1)"
@@ -42,4 +55,7 @@
   >
     &#187;
   </button>
+
+
+  
 </div>

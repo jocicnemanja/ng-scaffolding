@@ -5,8 +5,8 @@ export type SdkDrawerSide = 'right' | 'left';
 @Component({
   selector: 'sdk-drawer',
   standalone: true,
-  templateUrl: './sdk-drawer.html',
-  styleUrl: './sdk-drawer.css',
+  templateUrl: './drawer.html',
+  styleUrl: './drawer.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.sdk-drawer-open]': 'open()',

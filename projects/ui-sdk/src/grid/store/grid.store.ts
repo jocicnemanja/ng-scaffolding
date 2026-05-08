@@ -1,9 +1,9 @@
-import { computed, DestroyRef, inject, signal, WritableSignal } from '@angular/core';
+import { computed, DestroyRef, effect, inject, signal, untracked, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMPTY, Subject } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
-import { GridDataSource, GridError, GridState, PaginationState, QueryState } from './gird.models';
-import { buildError } from '../utils/http-request.utils';
+import { GridDataSource, GridError, GridState, PaginationState, QueryState } from '../gird.models';
+import { buildError } from '../../utils/http-request.utils';
 
 export type PendingConfirmation<T> =
   | { kind: 'create'; payload: Partial<T> }
@@ -67,6 +67,9 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   readonly activeId = computed(() => this.state().activeId);
 
   readonly isLoading = computed(() => this.loadingCounter() > 0);
+  readonly page = computed(() => this.pagination().page);
+  readonly size = computed(() => this.pagination().size);
+
   readonly hasNext = computed(() => this.pagination().page < this.pagination().totalPages);
   readonly hasPrev = computed(() => this.pagination().page > 1);
   readonly selectedEntities = computed(() =>
@@ -142,6 +145,15 @@ export class GridStore<T extends { id: string }, TRaw = T> {
     this._pendingConfirmation.set(null);
   }
 
+  setPagination(paginationState: PaginationState): void {
+    this.patchState({
+      pagination: {
+        ...this.pagination(),
+        ...paginationState,
+      },
+    });
+  }
+
   // ─── State helpers ────────────────────────────────────────────────────────
   protected patchState(patch: Partial<GridState<T>>): void {
     this.state.update((current) => ({
@@ -179,6 +191,14 @@ export class GridStore<T extends { id: string }, TRaw = T> {
     private dataSource: GridDataSource<T, QueryState, PaginationState>,
     config?: GridStoreConfig,
   ) {
+
+    effect(() => {
+      this.page();
+      this.size();
+      this.query();
+      untracked(() => this.refresh());
+    });
+
     this.requireConfirm = {
       create: config?.confirmations?.create ?? false,
       update: config?.confirmations?.update ?? false,

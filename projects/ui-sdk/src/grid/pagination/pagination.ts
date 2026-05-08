@@ -1,19 +1,21 @@
 import { Component, ChangeDetectionStrategy, input, output, computed } from '@angular/core';
+import { PaginationState } from '../gird.models';
 
 @Component({
   selector: 'sdk-pagination',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'class': 'pagination' },
-  templateUrl: './sdk-pagination.html',
-  styleUrl: './sdk-pagination.css',
+  templateUrl: './pagination.html',
+  styleUrl: './pagination.css',
 })
 export class SdkPagination {
   currentPage = input.required<number>();
   totalItems = input.required<number>();
   pageSize = input(10);
+  pageSizeOptions = input<number[]>([10, 25, 50, 100]);
 
-  pageChange = output<number>();
+  pageChange = output<PaginationState>();
 
   totalPages = computed(() =>
     Math.max(1, Math.ceil(this.totalItems() / this.pageSize()))
@@ -49,6 +51,14 @@ export class SdkPagination {
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages() || page === this.currentPage()) return;
 
-    this.pageChange.emit(page);
+    this.pageChange.emit({ page, size: this.pageSize(), totalItems: this.totalItems(), totalPages: this.totalPages() });
+  }
+
+  onPageSizeChange(event: Event) {
+    const size = Number((event.target as HTMLSelectElement).value);
+    const totalPages = Math.max(1, Math.ceil(this.totalItems() / size));
+    const page = Math.min(this.currentPage(), totalPages);
+
+    this.pageChange.emit({ page, size, totalItems: this.totalItems(), totalPages });
   }
 }

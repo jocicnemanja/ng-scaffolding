@@ -11,8 +11,8 @@ export type SdkConfirmKind = 'info' | 'warning' | 'danger';
 @Component({
   selector: 'sdk-confirm-dialog',
   standalone: true,
-  templateUrl: './sdk-confirm-dialog.html',
-  styleUrl: './sdk-confirm-dialog.css',
+  templateUrl: './confirm-dialog.html',
+  styleUrl: './confirm-dialog.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.sdk-confirm-open]': 'open()',

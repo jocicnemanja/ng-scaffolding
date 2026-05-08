@@ -96,7 +96,7 @@
         [currentPage]="_store.pagination().page"
         [totalItems]="_store.pagination().totalItems"
         [pageSize]="_store.pagination().size"
-        (pageChange)="null"
+        (pageChange)="handlePageChange($event)"
       />
     }
     @let _footerRef = footerRef();

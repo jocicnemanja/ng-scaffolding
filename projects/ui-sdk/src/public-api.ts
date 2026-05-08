@@ -3,19 +3,19 @@
  */
 
 // Export the main SDK component
-export * from './sdk-input/sdk-input';
+export * from './form/input/input';
 
 // Confirmation dialog
-export * from './sdk-confirm-dialog/sdk-confirm-dialog';
+export * from './components/confirm-dialog/confirm-dialog';
 
 // Table
-export * from './sdk-table/sdk-table';
+export * from './grid/table/table';
 
 // Pagination
-export * from './sdk-pagination/sdk-pagination';
+export * from './grid/pagination/pagination';
 
 // Drawer
-export * from './sdk-drawer/sdk-drawer';
+export * from './components/drawer/drawer';
 
 // Export the library entry point
 export * from './lib/ui-sdk';
@@ -24,12 +24,12 @@ export * from './lib/ui-sdk';
 export * from './playground/playground';
 
 // Grid store
-export * from './grid-store/gird.models';
-export * from './grid-store/grid.store';
-export * from './grid-store/base-signal.store';
+export * from './grid/gird.models';
+export * from './grid/store/grid.store';
+export * from './grid/store/base-signal.store';
 
 // Shared models
-export * from './models/page-response.models';
+export * from './grid/page-response.models';
 
 // Utilities
 export * from './utils/http-request.utils';

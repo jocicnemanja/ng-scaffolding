@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SdkInput } from './sdk-input';
+import { SdkInput } from './input';
 
 describe('SdkInput', () => {
   let component: SdkInput;

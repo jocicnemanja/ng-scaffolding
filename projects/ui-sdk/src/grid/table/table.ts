@@ -8,10 +8,11 @@ import {
   input,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { SdkPagination } from '../sdk-pagination/sdk-pagination';
-import { GridStore } from '../grid-store/grid.store';
-import { SdkConfirmDialog, SdkConfirmKind } from '../sdk-confirm-dialog/sdk-confirm-dialog';
-import { SdkDrawer } from '../sdk-drawer/sdk-drawer';
+import { SdkPagination } from '../pagination/pagination';
+import { GridStore } from '../store/grid.store';
+import { SdkConfirmDialog, SdkConfirmKind } from '../../components/confirm-dialog/confirm-dialog';
+import { SdkDrawer } from '../../components/drawer/drawer';
+import { PaginationState } from '../gird.models';
 
 export type SdkTableFormMode = 'create' | 'edit';
 
@@ -71,8 +72,8 @@ const DEFAULT_DRAWER_CONFIG: SdkTableDrawerConfig = {
     'class': 'table-wrapper',
     '[class.__fullscreen]': 'isFullScreen',
   },
-  templateUrl: './sdk-table.html',
-  styleUrl: './sdk-table.css',
+  templateUrl: './table.html',
+  styleUrl: './table.css',
   imports: [NgTemplateOutlet, SdkPagination, SdkConfirmDialog, SdkDrawer],
 })
 export class SdkTable {
@@ -206,5 +207,9 @@ export class SdkTable {
 
   downloadCsv() {
     throw new Error('Not implemented');
+  }
+
+  handlePageChange(paginationState: PaginationState) {
+    this.store().setPagination(paginationState);
   }
 }

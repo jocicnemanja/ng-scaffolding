@@ -77,8 +77,8 @@ export type SdkInputTouchedFn = () => void;
       multi: true,
     },
   ],
-  templateUrl: './sdk-input.html',
-  styleUrl: './sdk-input.css',
+  templateUrl: './input.html',
+  styleUrl: './input.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   /**
    * Host bindings: Dynamically bind attributes/classes/styles to the host element

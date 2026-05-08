@@ -18,9 +18,9 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { pipe } from 'rxjs';
 import { debounceTime, switchMap, finalize } from 'rxjs/operators';
-import { GridDataSource, GridError, QueryState, PaginationState } from './gird.models';
-import { PageResponse } from '../models/page-response.models';
-import { buildError } from '../utils/http-request.utils';
+import { GridDataSource, GridError, QueryState, PaginationState } from '../gird.models';
+import { PageResponse } from '../page-response.models';
+import { buildError } from '../../utils/http-request.utils';
 
 const pagesFor = (totalItems: number, size: number): number =>
   size <= 0 ? 1 : Math.max(1, Math.ceil(totalItems / size));

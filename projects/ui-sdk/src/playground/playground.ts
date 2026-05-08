@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SdkInput } from '../sdk-input/sdk-input';
+import { SdkInput } from '../form/input/input';
 
 @Component({
   selector: 'sdk-playground',
