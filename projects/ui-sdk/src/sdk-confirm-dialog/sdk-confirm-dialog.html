@@ -1,0 +1,29 @@
+@if (open()) {
+  <div
+    class="sdk-confirm__backdrop"
+    (click)="onBackdropClick($event)">
+    <div
+      class="sdk-confirm__card"
+      [class.sdk-confirm--danger]="kind() === 'danger'"
+      [class.sdk-confirm--warning]="kind() === 'warning'"
+      role="document">
+      <h2 id="sdk-confirm-title" class="sdk-confirm__title">{{ title() }}</h2>
+      <p class="sdk-confirm__message">{{ message() }}</p>
+      <div class="sdk-confirm__actions">
+        <button
+          type="button"
+          class="sdk-confirm__btn sdk-confirm__btn--cancel"
+          (click)="onCancel()">
+          {{ cancelLabel() }}
+        </button>
+        <button
+          type="button"
+          class="sdk-confirm__btn sdk-confirm__btn--confirm"
+          (click)="onConfirm()"
+          cdkFocusInitial>
+          {{ confirmLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

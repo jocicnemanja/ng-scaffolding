@@ -5,6 +5,18 @@
 // Export the main SDK component
 export * from './sdk-input/sdk-input';
 
+// Confirmation dialog
+export * from './sdk-confirm-dialog/sdk-confirm-dialog';
+
+// Table
+export * from './sdk-table/sdk-table';
+
+// Pagination
+export * from './sdk-pagination/sdk-pagination';
+
+// Drawer
+export * from './sdk-drawer/sdk-drawer';
+
 // Export the library entry point
 export * from './lib/ui-sdk';
 

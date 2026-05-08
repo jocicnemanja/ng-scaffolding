@@ -8,7 +8,9 @@
     @let _headerRef = headerRef();
     @if (_headerRef) {
       <section class="__header">
-        <ng-container *ngTemplateOutlet="_headerRef"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="_headerRef; context: headerContext"
+        ></ng-container>
       </section>
     }
     @if (_configuration.showRefresh || _configuration.canExport || _configuration.canFullscreen) {
@@ -75,7 +77,7 @@
           @let _rowRef = rowRef();
           @for (row of _rows; track trackByFn(i, row); let i = $index) {
             <ng-container
-              *ngTemplateOutlet="_rowRef; context: { $implicit: row, idx: i }"
+              *ngTemplateOutlet="_rowRef; context: rowContext(row, i)"
             ></ng-container>
           }
         }
@@ -90,7 +92,7 @@
 
   <footer>
     @if (_store.pagination().totalPages > 0) {
-      <kim-pagination
+      <sdk-pagination
         [currentPage]="_store.pagination().page"
         [totalItems]="_store.pagination().totalItems"
         [pageSize]="_store.pagination().size"
@@ -105,3 +107,30 @@
     }
   </footer>
 </section>
+
+@let _confirmCopy = pendingConfirmCopy();
+@if (_confirmCopy) {
+  <sdk-confirm-dialog
+    [open]="!!_store.pendingConfirmation()"
+    [title]="_confirmCopy.title"
+    [message]="_confirmCopy.message"
+    [confirmLabel]="_confirmCopy.confirmLabel"
+    [cancelLabel]="_confirmCopy.cancelLabel"
+    [kind]="_confirmCopy.kind"
+    (confirm)="_store.confirmPending()"
+    (cancel)="_store.cancelPending()"
+  />
+}
+
+@let _formRef = formRef();
+@if (_formRef) {
+  <sdk-drawer
+    [open]="isFormOpen()"
+    [title]="drawerTitle()"
+    (closed)="closeForm()"
+  >
+    @if (isFormOpen()) {
+      <ng-container *ngTemplateOutlet="_formRef; context: formContext()"></ng-container>
+    }
+  </sdk-drawer>
+}

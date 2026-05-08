@@ -1,0 +1,108 @@
+:host {
+  --sdk-confirm-backdrop: rgba(15, 23, 42, 0.55);
+  --sdk-confirm-bg: #ffffff;
+  --sdk-confirm-fg: #1f2937;
+  --sdk-confirm-muted: #4b5563;
+  --sdk-confirm-border: #e5e7eb;
+  --sdk-confirm-radius: 8px;
+  --sdk-confirm-primary: #0066cc;
+  --sdk-confirm-primary-fg: #ffffff;
+  --sdk-confirm-danger: #dc2626;
+  --sdk-confirm-warning: #d97706;
+}
+
+.sdk-confirm__backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--sdk-confirm-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  animation: sdk-confirm-fade 120ms ease-out;
+}
+
+.sdk-confirm__card {
+  background: var(--sdk-confirm-bg);
+  color: var(--sdk-confirm-fg);
+  border-radius: var(--sdk-confirm-radius);
+  border: 1px solid var(--sdk-confirm-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+  animation: sdk-confirm-pop 140ms ease-out;
+}
+
+.sdk-confirm__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.sdk-confirm__message {
+  margin: 0 0 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--sdk-confirm-muted);
+  line-height: 1.5;
+}
+
+.sdk-confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.sdk-confirm__btn {
+  font: inherit;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.sdk-confirm__btn:focus-visible {
+  outline: 2px solid var(--sdk-confirm-primary);
+  outline-offset: 2px;
+}
+
+.sdk-confirm__btn--cancel {
+  background: transparent;
+  color: var(--sdk-confirm-fg);
+  border-color: var(--sdk-confirm-border);
+}
+
+.sdk-confirm__btn--cancel:hover {
+  background: #f3f4f6;
+}
+
+.sdk-confirm__btn--confirm {
+  background: var(--sdk-confirm-primary);
+  color: var(--sdk-confirm-primary-fg);
+}
+
+.sdk-confirm__btn--confirm:hover {
+  filter: brightness(0.95);
+}
+
+.sdk-confirm--danger .sdk-confirm__btn--confirm {
+  background: var(--sdk-confirm-danger);
+}
+
+.sdk-confirm--warning .sdk-confirm__btn--confirm {
+  background: var(--sdk-confirm-warning);
+}
+
+@keyframes sdk-confirm-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes sdk-confirm-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}

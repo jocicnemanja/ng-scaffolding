@@ -5,6 +5,26 @@ import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { GridDataSource, GridError, GridState, PaginationState, QueryState } from './gird.models';
 import { buildError } from '../utils/http-request.utils';
 
+export type PendingConfirmation<T> =
+  | { kind: 'create'; payload: Partial<T> }
+  | { kind: 'update'; payload: T }
+  | { kind: 'delete'; id: string | number };
+
+export interface GridStoreConfirmations {
+  create?: boolean;
+  update?: boolean;
+  delete?: boolean;
+}
+
+export interface GridStoreConfig {
+  /**
+   * Whether each CRUD action requires user confirmation before dispatching.
+   * Defaults: delete=true, create/update=false (the form submission is
+   * treated as the user's confirmation).
+   */
+  confirmations?: GridStoreConfirmations;
+}
+
 export class GridStore<T extends { id: string }, TRaw = T> {
   private readonly destroyRef = inject(DestroyRef);
 
@@ -13,6 +33,11 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   private readonly createAction$ = new Subject<Partial<T>>();
   private readonly updateAction$ = new Subject<T>();
   private readonly deleteAction$ = new Subject<string | number>();
+
+  // ─── Confirmation gate ───────────────────────────────────────────────────
+  private readonly _pendingConfirmation = signal<PendingConfirmation<T> | null>(null);
+  readonly pendingConfirmation = this._pendingConfirmation.asReadonly();
+  private readonly requireConfirm: Required<GridStoreConfirmations>;
 
   // ─── State ────────────────────────────────────────────────────────────────
   protected readonly state: WritableSignal<GridState<T>> = signal({
@@ -71,15 +96,50 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   }
 
   create(entity: Partial<T>): void {
-    this.createAction$.next(entity);
+    if (this.requireConfirm.create) {
+      this._pendingConfirmation.set({ kind: 'create', payload: entity });
+    } else {
+      this.createAction$.next(entity);
+    }
   }
 
   update(entity: T): void {
-    this.updateAction$.next(entity);
+    if (this.requireConfirm.update) {
+      this._pendingConfirmation.set({ kind: 'update', payload: entity });
+    } else {
+      this.updateAction$.next(entity);
+    }
   }
 
   delete(id: string | number): void {
-    this.deleteAction$.next(id);
+    if (this.requireConfirm.delete) {
+      this._pendingConfirmation.set({ kind: 'delete', id });
+    } else {
+      this.deleteAction$.next(id);
+    }
+  }
+
+  confirmPending(): void {
+    const pending = this._pendingConfirmation();
+    if (!pending) {
+      return;
+    }
+    this._pendingConfirmation.set(null);
+    switch (pending.kind) {
+      case 'create':
+        this.createAction$.next(pending.payload);
+        break;
+      case 'update':
+        this.updateAction$.next(pending.payload);
+        break;
+      case 'delete':
+        this.deleteAction$.next(pending.id);
+        break;
+    }
+  }
+
+  cancelPending(): void {
+    this._pendingConfirmation.set(null);
   }
 
   // ─── State helpers ────────────────────────────────────────────────────────
@@ -115,7 +175,15 @@ export class GridStore<T extends { id: string }, TRaw = T> {
     this.patchState({ loadingCounter: this.loadingCounter() - 1 });
   }
 
-  constructor(private dataSource: GridDataSource<T, QueryState, PaginationState>) {
+  constructor(
+    private dataSource: GridDataSource<T, QueryState, PaginationState>,
+    config?: GridStoreConfig,
+  ) {
+    this.requireConfirm = {
+      create: config?.confirmations?.create ?? false,
+      update: config?.confirmations?.update ?? false,
+      delete: config?.confirmations?.delete ?? true,
+    };
 
     this.refresh$
       .pipe(

@@ -23,21 +23,21 @@ button {
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.15s ease;
+}
 
-  &:hover:not(:disabled):not(.active) {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-  }
+button:hover:not(:disabled):not(.active) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
 
-  &.active {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: #fff;
-    font-weight: 600;
-  }
+button.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+}
 
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

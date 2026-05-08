@@ -1,13 +1,14 @@
 import { Component, ChangeDetectionStrategy, input, output, computed } from '@angular/core';
 
 @Component({
-  selector: 'kim-pagination',
+  selector: 'sdk-pagination',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { 'class': 'pagination' },
-  templateUrl: './pagination.component.html',
-  styleUrl: './pagination.component.scss',
+  templateUrl: './sdk-pagination.html',
+  styleUrl: './sdk-pagination.css',
 })
-export class Pagination {
+export class SdkPagination {
   currentPage = input.required<number>();
   totalItems = input.required<number>();
   pageSize = input(10);
