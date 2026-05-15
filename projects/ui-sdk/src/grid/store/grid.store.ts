@@ -1,7 +1,7 @@
 import { computed, DestroyRef, effect, inject, signal, untracked, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EMPTY, Subject } from 'rxjs';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, merge, Observable, Subject } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { GridDataSource, GridError, GridState, PaginationState, QueryState } from '../gird.models';
 import { buildError } from '../../utils/http-request.utils';
 
@@ -34,6 +34,32 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   private readonly updateAction$ = new Subject<T>();
   private readonly deleteAction$ = new Subject<string | number>();
 
+  // ─── CRUD streams (emit on success) ──────────────────────────────────────
+  private readonly create$ = this.buildCrudStream(this.createAction$, (p) =>
+    this.dataSource.create?.(p),
+  );
+  private readonly update$ = this.buildCrudStream(this.updateAction$, (p) =>
+    this.dataSource.update?.(p),
+  );
+  private readonly delete$ = this.buildCrudStream(this.deleteAction$, (p) =>
+    this.dataSource.delete?.(p),
+  );
+
+  // ─── Fetch stream (driven by refresh + successful CRUD) ──────────────────
+  private readonly fetch$ = merge(this.refresh$, this.create$, this.update$, this.delete$).pipe(
+    switchMap(() => {
+      this.incrementLoading();
+      return this.dataSource.read(this.query(), this.pagination()).pipe(
+        catchError((err) => {
+          this.setError(buildError(err));
+          return EMPTY;
+        }),
+        finalize(() => this.decrementLoading()),
+      );
+    }),
+    takeUntilDestroyed(this.destroyRef),
+  );
+
   // ─── Confirmation gate ───────────────────────────────────────────────────
   private readonly _pendingConfirmation = signal<PendingConfirmation<T> | null>(null);
   readonly pendingConfirmation = this._pendingConfirmation.asReadonly();
@@ -59,19 +85,23 @@ export class GridStore<T extends { id: string }, TRaw = T> {
   });
 
   readonly entities = computed(() => this.state().entities);
+
+  readonly loadingCounter = computed(() => this.state().loadingCounter);
+  readonly isLoading = computed(() => this.loadingCounter() > 0);
+  readonly errors = computed(() => this.state().errors);
+
   readonly query = computed(() => this.state().query);
   readonly pagination = computed(() => this.state().pagination);
-  readonly loadingCounter = computed(() => this.state().loadingCounter);
-  readonly errors = computed(() => this.state().errors);
+  readonly page = computed(() => this.pagination().page);
+  readonly size = computed(() => this.pagination().size);
+  readonly totalItems = computed(() => this.pagination().totalItems);
+  readonly totalPages = computed(() => this.pagination().totalPages);
+  readonly hasNext = computed(() => this.page() < this.totalPages());
+  readonly hasPrev = computed(() => this.page() > 1);
+
   readonly selectedIds = computed(() => this.state().selectedIds);
   readonly activeId = computed(() => this.state().activeId);
 
-  readonly isLoading = computed(() => this.loadingCounter() > 0);
-  readonly page = computed(() => this.pagination().page);
-  readonly size = computed(() => this.pagination().size);
-
-  readonly hasNext = computed(() => this.pagination().page < this.pagination().totalPages);
-  readonly hasPrev = computed(() => this.pagination().page > 1);
   readonly selectedEntities = computed(() =>
     this.entities().filter((entity) => this.selectedIds().has(entity.id)),
   );
@@ -152,6 +182,7 @@ export class GridStore<T extends { id: string }, TRaw = T> {
         ...paginationState,
       },
     });
+    this.refresh();
   }
 
   // ─── State helpers ────────────────────────────────────────────────────────
@@ -192,12 +223,12 @@ export class GridStore<T extends { id: string }, TRaw = T> {
     config?: GridStoreConfig,
   ) {
 
-    effect(() => {
-      this.page();
-      this.size();
-      this.query();
-      untracked(() => this.refresh());
-    });
+    // effect(() => {
+    //   this.page();
+    //   this.size();
+    //   this.query();
+    //   untracked(() => this.refresh());
+    // });
 
     this.requireConfirm = {
       create: config?.confirmations?.create ?? false,
@@ -205,88 +236,32 @@ export class GridStore<T extends { id: string }, TRaw = T> {
       delete: config?.confirmations?.delete ?? true,
     };
 
-    this.refresh$
-      .pipe(
-        switchMap(() => {
-          this.incrementLoading();
-          return this.dataSource.read(this.query(), this.pagination()).pipe(
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((response) => {
-        this.setEntities(response.content, response.totalElements);
-      });
+    this.fetch$.subscribe((response) => {
+      this.setEntities(response.content, response.totalElements);
+    });
+  }
 
-    this.createAction$
-      .pipe(
-        switchMap((payload) => {
-          const create$ = this.dataSource.create?.(payload);
-          if (!create$) {
+  private buildCrudStream<P>(
+    action$: Subject<P>,
+    operation: (payload: P) => Observable<unknown> | undefined,
+  ): Observable<unknown> {
+    return action$.pipe(
+      switchMap((payload) => {
+        const result$ = operation(payload);
+        if (!result$) {
+          return EMPTY;
+        }
+
+        this.incrementLoading();
+        return result$.pipe(
+          catchError((err) => {
+            this.setError(buildError(err));
             return EMPTY;
-          }
-
-          this.incrementLoading();
-          return create$.pipe(
-            tap(() => this.refresh()),
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
-
-    this.updateAction$
-      .pipe(
-        switchMap((payload) => {
-          const update$ = this.dataSource.update?.(payload);
-          if (!update$) {
-            return EMPTY;
-          }
-
-          this.incrementLoading();
-          return update$.pipe(
-            tap(() => this.refresh()),
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
-
-    this.deleteAction$
-      .pipe(
-        switchMap((payload) => {
-          const delete$ = this.dataSource.delete?.(payload);
-          if (!delete$) {
-            return EMPTY;
-          }
-
-          this.incrementLoading();
-          return delete$.pipe(
-            tap(() => this.refresh()),
-            catchError((err) => {
-              this.setError(buildError(err));
-              return EMPTY;
-            }),
-            finalize(() => this.decrementLoading()),
-          );
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe();
+          }),
+          finalize(() => this.decrementLoading()),
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    );
   }
 }

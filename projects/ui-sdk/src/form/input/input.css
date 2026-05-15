@@ -17,11 +17,14 @@
   /* Set custom properties (CSS variables) for easy theming */
   --sdk-input-primary-color: #0066cc;
   --sdk-input-border-color: #ccc;
+  --sdk-input-border-width: 2px;
   --sdk-input-padding: 0.75rem 1rem;
   --sdk-input-font-size: 1rem;
   --sdk-input-border-radius: 4px;
   --sdk-input-disabled-opacity: 0.6;
   --sdk-input-focus-shadow-blur: 3px;
+  --sdk-input-focus-shadow: 0 0 0 var(--sdk-input-focus-shadow-blur)
+    rgba(0, 102, 204, 0.1);
 }
 
 /**
@@ -93,7 +96,7 @@
   line-height: 1.5;
 
   /* Appearance */
-  border: 2px solid var(--sdk-input-border-color);
+  border: var(--sdk-input-border-width) solid var(--sdk-input-border-color);
   border-radius: var(--sdk-input-border-radius);
   background-color: #fff;
   color: #333;
@@ -115,8 +118,7 @@
 .sdk-input:focus {
   outline: none;
   border-color: var(--sdk-input-primary-color);
-  box-shadow: 0 0 0 var(--sdk-input-focus-shadow-blur)
-    rgba(0, 102, 204, 0.1);
+  box-shadow: var(--sdk-input-focus-shadow);
 }
 
 /**
