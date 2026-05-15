@@ -64,6 +64,12 @@
         <sdk-input formControlName="password" type="password" placeholder="••••••••" />
       </div>
 
+
+      <div class="playground__row">
+        <label>Role</label>
+        <sdk-select formControlName="role" [options]="options()" [configuration]="configuration()" />
+      </div>
+
       <button type="button" class="playground__reset" (click)="reset()">Reset</button>
     </form>
 

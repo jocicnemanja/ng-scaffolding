@@ -1,0 +1,55 @@
+@let resolvedCfg = cfg();
+
+<div
+  class="sdk-select"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+>
+  @for (opt of selectedOptions(); track trackById($index, opt)) {
+    <span class="sdk-select-chip">
+      <span class="sdk-select-chip-label">{{ displayLabel(opt) }}</span>
+      <button
+        type="button"
+        class="sdk-select-chip-remove"
+        [attr.aria-label]="'Remove ' + displayLabel(opt)"
+        [disabled]="disabled()"
+        (click)="toggleOption(opt)"
+      >×</button>
+    </span>
+  }
+
+  <sdk-input
+    cssClass="sdk-select-input"
+    [placeholder]="resolvedCfg.placeholder"
+    [disabled]="disabled()"
+    (valueChange)="onSearchChange($event)"
+    (focusEvent)="onOpen()"
+  />
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="_showDropdown()"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+  (overlayOutsideClick)="onClose()"
+>
+  <ul class="sdk-select-list" role="listbox" [id]="listboxId">
+    @for (option of filteredOptions(); track trackById($index, option); let i = $index) {
+      <li
+        class="sdk-select-option"
+        role="option"
+        [id]="optionDomId(option)"
+        [class.sdk-select-option-active]="i === _activeIndex()"
+        [class.sdk-select-option-selected]="isSelected(option)"
+        [attr.aria-selected]="isSelected(option)"
+        (click)="toggleOption(option)"
+        (mouseenter)="_activeIndex.set(i)"
+      >
+        {{ displayLabel(option) }}
+      </li>
+    } @empty {
+      <li class="sdk-select-empty" role="presentation">No options</li>
+    }
+  </ul>
+</ng-template>

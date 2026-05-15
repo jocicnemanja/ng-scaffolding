@@ -1,0 +1,174 @@
+/**
+ * SDK Select Component Styles
+ * Theming via CSS custom properties on :host. The inner sdk-input picks up
+ * --sdk-input-* overrides cascaded from the .sdk-select wrapper (no ::ng-deep).
+ */
+
+:host {
+  display: block;
+  width: 100%;
+
+  --sdk-select-primary-color: #0066cc;
+  --sdk-select-border-color: #ccc;
+  --sdk-select-padding: 0.25rem 0.5rem;
+  --sdk-select-font-size: 1rem;
+  --sdk-select-border-radius: 4px;
+  --sdk-select-disabled-opacity: 0.6;
+  --sdk-select-focus-shadow-blur: 3px;
+  --sdk-select-chip-bg: #eef3fb;
+  --sdk-select-chip-color: #0b3b75;
+  --sdk-select-option-hover-bg: #f5f7fa;
+  --sdk-select-option-active-bg: #e6efff;
+  --sdk-select-option-selected-bg: #d6e6ff;
+}
+
+:host(.compact) {
+  --sdk-select-padding: 0.125rem 0.375rem;
+  --sdk-select-font-size: 0.875rem;
+}
+
+:host(.large) {
+  --sdk-select-padding: 0.5rem 0.75rem;
+  --sdk-select-font-size: 1.125rem;
+}
+
+:host(.sdk-select-disabled) {
+  opacity: var(--sdk-select-disabled-opacity);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  :host {
+    width: 100%;
+  }
+}
+
+/* ============================================================ */
+/* Select wrapper                                                */
+/* ============================================================ */
+
+.sdk-select {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  padding: var(--sdk-select-padding);
+  border: 2px solid var(--sdk-select-border-color);
+  border-radius: var(--sdk-select-border-radius);
+  background-color: #fff;
+  cursor: text;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  /* Cascade overrides into the inner sdk-input via CSS custom properties */
+  --sdk-input-border-width: 0;
+  --sdk-input-padding: 0.375rem 0.25rem;
+  --sdk-input-focus-shadow: none;
+}
+
+.sdk-select:focus-within {
+  border-color: var(--sdk-select-primary-color);
+  box-shadow: 0 0 0 var(--sdk-select-focus-shadow-blur)
+    rgba(0, 102, 204, 0.1);
+}
+
+/* ============================================================ */
+/* Chips                                                         */
+/* ============================================================ */
+
+.sdk-select-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  background-color: var(--sdk-select-chip-bg);
+  color: var(--sdk-select-chip-color);
+  border-radius: 999px;
+  font-size: calc(var(--sdk-select-font-size) * 0.875);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.sdk-select-chip-label {
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sdk-select-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.sdk-select-chip-remove:hover:not(:disabled) {
+  background-color: rgba(11, 59, 117, 0.15);
+}
+
+.sdk-select-chip-remove:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================================ */
+/* Inner sdk-input                                               */
+/* ============================================================ */
+
+.sdk-select sdk-input {
+  flex: 1 1 8rem;
+  min-width: 8rem;
+  width: auto;
+}
+
+/* ============================================================ */
+/* Dropdown                                                      */
+/* ============================================================ */
+
+.sdk-select-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  min-width: 12rem;
+  border: 1px solid var(--sdk-select-border-color);
+  border-radius: var(--sdk-select-border-radius);
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-height: 14rem;
+  overflow-y: auto;
+}
+
+.sdk-select-option {
+  padding: 0.5rem 0.75rem;
+  font-size: var(--sdk-select-font-size);
+  cursor: pointer;
+  user-select: none;
+}
+
+.sdk-select-option:hover {
+  background-color: var(--sdk-select-option-hover-bg);
+}
+
+.sdk-select-option-active {
+  background-color: var(--sdk-select-option-active-bg);
+}
+
+.sdk-select-option-selected {
+  background-color: var(--sdk-select-option-selected-bg);
+  font-weight: 600;
+}
+
+.sdk-select-empty {
+  padding: 0.5rem 0.75rem;
+  color: #999;
+  font-size: var(--sdk-select-font-size);
+  font-style: italic;
+}
