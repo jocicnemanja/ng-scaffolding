@@ -94,8 +94,6 @@ export type SdkInputTouchedFn = () => void;
     '[attr.role]': '"group"',
     '[attr.data-input-type]': 'type()',
 
-    // Bind styles to host (CSS variables from :host)
-    '[style.--sdk-input-padding]': '"0.75rem 1rem"',
     '(focusout)': 'onFocusOut($event)'
   },
 })
@@ -119,12 +117,6 @@ export class SdkInput implements ControlValueAccessor {
    */
   readonly ariaLabel = input<string>('');
 
-  /**
-   * CSS class names to apply to the input element.
-   * Useful for custom styling without modifying the component.
-   * @default ''
-   */
-  readonly cssClass = input<string>('');
 
   /**
    * Maximum length of the input value.

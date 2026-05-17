@@ -3,6 +3,7 @@ import {
   Component,
   Signal,
   computed,
+  effect,
   forwardRef,
   input,
   output,
@@ -132,6 +133,22 @@ export class SdkSelect<T extends SdkSelectOption = SdkSelectOption>
 
   readonly overlayPositions = OVERLAY_POSITIONS;
   readonly listboxId = `sdk-select-listbox-${++_instanceCounter}`;
+
+  // CDK overlay hide on scoll
+  constructor() {
+    effect((onCleanup) => {
+      if (!this._showDropdown()) return;
+      const handler = (event: Event) => {
+        const target = event.target as Node | null;
+        if (target instanceof Element && target.closest('.sdk-select-list')) {
+          return;
+        }
+        this.onClose();
+      };
+      window.addEventListener('scroll', handler, true);
+      onCleanup(() => window.removeEventListener('scroll', handler, true));
+    });
+  }
 
   /** Configuration with defaults applied — single source of truth. */
   readonly cfg = computed<ResolvedConfiguration<T>>(() => ({

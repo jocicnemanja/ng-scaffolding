@@ -32,6 +32,7 @@
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="_showDropdown()"
   [cdkConnectedOverlayPositions]="overlayPositions"
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth"
   (overlayOutsideClick)="onClose()"
 >
   <ul class="sdk-select-list" role="listbox" [id]="listboxId">
