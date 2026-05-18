@@ -1,0 +1,188 @@
+/**
+ * SDK Design Tokens
+ *
+ * Two tiers:
+ *   1. Primitive scale (palette ramps, raw spacing values). Not consumed
+ *      directly by components — only by semantic tokens below.
+ *   2. Semantic tokens (--sdk-color-primary, --sdk-space-2, ...). These are
+ *      the only names components should reference. Re-skinning a theme means
+ *      remapping semantic tokens, never editing components.
+ *
+ * Dark mode / brand variants: re-declare semantic tokens inside
+ * [data-theme="dark"] (or any selector) and the whole SDK updates at runtime.
+ */
+
+:root {
+  /* ============================================================ */
+  /* Primitive palette                                            */
+  /* ============================================================ */
+  --sdk-blue-50:  #eef3fb;
+  --sdk-blue-100: #e6efff;
+  --sdk-blue-200: #d6e6ff;
+  --sdk-blue-500: #3b82f6;
+  --sdk-blue-600: #2563eb;
+  --sdk-blue-700: #1d4ed8;
+  --sdk-blue-900: #0b3b75;
+
+  --sdk-slate-50:  #f8fafc;
+  --sdk-slate-100: #f1f5f9;
+  --sdk-slate-200: #e2e8f0;
+  --sdk-slate-300: #cbd5e1;
+  --sdk-slate-400: #94a3b8;
+  --sdk-slate-500: #64748b;
+  --sdk-slate-600: #475569;
+  --sdk-slate-700: #334155;
+  --sdk-slate-900: #0f172a;
+
+  --sdk-gray-100: #f3f4f6;
+  --sdk-gray-200: #e5e7eb;
+  --sdk-gray-500: #6b7280;
+  --sdk-gray-600: #4b5563;
+  --sdk-gray-800: #1f2937;
+
+  --sdk-red-600:    #dc2626;
+  --sdk-amber-600:  #d97706;
+  --sdk-green-600:  #16a34a;
+
+  /* ============================================================ */
+  /* Semantic — color                                             */
+  /* ============================================================ */
+  --sdk-color-primary:           var(--sdk-blue-500);
+  --sdk-color-primary-hover:     var(--sdk-blue-600);
+  --sdk-color-primary-active:    var(--sdk-blue-700);
+  --sdk-color-primary-fg:        #ffffff;
+  --sdk-color-primary-soft-bg:   var(--sdk-blue-50);
+  --sdk-color-primary-soft-fg:   var(--sdk-blue-900);
+
+  --sdk-color-danger:            var(--sdk-red-600);
+  --sdk-color-warning:           var(--sdk-amber-600);
+  --sdk-color-success:           var(--sdk-green-600);
+
+  --sdk-color-surface:           #ffffff;          /* component bg */
+  --sdk-color-surface-muted:     var(--sdk-slate-50);   /* subtle bg */
+  --sdk-color-surface-hover:     var(--sdk-slate-100);  /* hover bg */
+  --sdk-color-surface-disabled:  #f5f5f5;
+
+  --sdk-color-text:              var(--sdk-slate-900);  /* headings */
+  --sdk-color-text-body:         var(--sdk-slate-700);  /* body */
+  --sdk-color-text-muted:        var(--sdk-slate-500);  /* secondary */
+  --sdk-color-text-subtle:       var(--sdk-gray-600);
+  --sdk-color-text-placeholder:  #999999;
+  --sdk-color-text-disabled:     #999999;
+  --sdk-color-text-on-primary:   #ffffff;
+
+  --sdk-color-border:            var(--sdk-gray-200);
+  --sdk-color-border-strong:     var(--sdk-slate-200);
+  --sdk-color-border-input:      #cccccc;
+  --sdk-color-border-hover:      var(--sdk-slate-300);
+  --sdk-color-border-focus:      var(--sdk-color-primary);
+
+  --sdk-color-backdrop:          rgb(15 23 42 / 0.5);
+  --sdk-color-backdrop-strong:   rgb(15 23 42 / 0.55);
+
+  /* Focus ring is a translucent halo of the primary color. color-mix lets us
+     derive it from --sdk-color-primary so a brand swap just works. */
+  --sdk-color-focus-ring:        color-mix(in srgb, var(--sdk-color-primary) 15%, transparent);
+
+  /* Chips / soft accents */
+  --sdk-color-chip-bg:           var(--sdk-color-primary-soft-bg);
+  --sdk-color-chip-fg:           var(--sdk-color-primary-soft-fg);
+
+  /* ============================================================ */
+  /* Semantic — spacing (4px scale)                               */
+  /* ============================================================ */
+  --sdk-space-0:   0;
+  --sdk-space-1:   0.125rem;  /*  2px */
+  --sdk-space-2:   0.25rem;   /*  4px */
+  --sdk-space-3:   0.375rem;  /*  6px */
+  --sdk-space-4:   0.5rem;    /*  8px */
+  --sdk-space-5:   0.75rem;   /* 12px */
+  --sdk-space-6:   1rem;      /* 16px */
+  --sdk-space-7:   1.25rem;   /* 20px */
+  --sdk-space-8:   1.5rem;    /* 24px */
+  --sdk-space-10:  2rem;      /* 32px */
+
+  /* ============================================================ */
+  /* Semantic — radii                                             */
+  /* ============================================================ */
+  --sdk-radius-sm:    4px;
+  --sdk-radius-md:    6px;
+  --sdk-radius-lg:    8px;
+  --sdk-radius-pill:  999px;
+  /* Back-compat alias for the original token */
+  --sdk-border-radius: var(--sdk-radius-sm);
+
+  /* ============================================================ */
+  /* Semantic — typography                                        */
+  /* ============================================================ */
+  --sdk-font-family: inherit;
+  --sdk-font-size-xs:   0.75rem;
+  --sdk-font-size-sm:   0.875rem;
+  --sdk-font-size-md:   1rem;
+  --sdk-font-size-lg:   1.125rem;
+
+  --sdk-font-weight-regular: 400;
+  --sdk-font-weight-medium:  500;
+  --sdk-font-weight-semibold: 600;
+
+  --sdk-line-height-tight: 1.25;
+  --sdk-line-height-base:  1.5;
+
+  /* ============================================================ */
+  /* Semantic — shadows                                           */
+  /* ============================================================ */
+  --sdk-shadow-sm:     0 1px 3px rgb(0 0 0 / 0.10);
+  --sdk-shadow-md:     0 4px 12px rgb(0 0 0 / 0.08);
+  --sdk-shadow-lg:     0 20px 40px rgb(0 0 0 / 0.18);
+  --sdk-shadow-drawer: 0 0 24px rgb(0 0 0 / 0.18);
+  --sdk-shadow-focus:  0 0 0 3px var(--sdk-color-focus-ring);
+
+  /* ============================================================ */
+  /* Semantic — motion                                            */
+  /* ============================================================ */
+  --sdk-transition-fast: 0.15s ease;
+  --sdk-transition-base: 0.2s ease;
+
+  /* ============================================================ */
+  /* Semantic — z-index                                           */
+  /* ============================================================ */
+  --sdk-z-dropdown: 1000;
+  --sdk-z-overlay:  1000;
+  --sdk-z-modal:    1100;
+
+  /* ============================================================ */
+  /* Component defaults (point at semantic tokens — overridable)  */
+  /* ============================================================ */
+  --sdk-control-height-sm: 28px;
+  --sdk-control-height-md: 36px;
+  --sdk-control-height-lg: 44px;
+}
+
+/**
+ * Dark theme. Apply with <html data-theme="dark"> (or any ancestor).
+ * Only semantic tokens are re-mapped — primitives stay constant.
+ */
+[data-theme='dark'] {
+  --sdk-color-surface:           #0f172a;
+  --sdk-color-surface-muted:     #1e293b;
+  --sdk-color-surface-hover:     #243345;
+  --sdk-color-surface-disabled:  #1a2536;
+
+  --sdk-color-text:              #f8fafc;
+  --sdk-color-text-body:         #e2e8f0;
+  --sdk-color-text-muted:        #94a3b8;
+  --sdk-color-text-subtle:       #cbd5e1;
+  --sdk-color-text-placeholder:  #64748b;
+  --sdk-color-text-disabled:     #64748b;
+
+  --sdk-color-border:            #334155;
+  --sdk-color-border-strong:     #334155;
+  --sdk-color-border-input:      #475569;
+  --sdk-color-border-hover:      #64748b;
+
+  --sdk-color-backdrop:          rgb(0 0 0 / 0.6);
+  --sdk-color-backdrop-strong:   rgb(0 0 0 / 0.7);
+
+  --sdk-color-chip-bg:           #1e3a5f;
+  --sdk-color-chip-fg:           #bfdbfe;
+}

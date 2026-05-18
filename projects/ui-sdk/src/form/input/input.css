@@ -1,79 +1,56 @@
 /**
  * SDK Input Component Styles
- * Provides accessible, responsive input styling following WCAG AA standards
+ *
+ * All visual decisions come from SDK design tokens (declared on :root in
+ * styles/_tokens.scss). The component exposes its own --sdk-input-* knobs so
+ * a single instance can be tuned without touching the global theme.
  */
 
-/**
- * :host selector - Styles the component host element itself (<sdk-input>)
- * Useful for layout, display mode, and responsive behavior at the component level
- */
 :host {
-  /* Display the component as block by default */
   display: block;
-
-  /* Allow width control from parent */
   width: 100%;
 
-  /* Set custom properties (CSS variables) for easy theming */
-  --sdk-input-primary-color: #0066cc;
-  --sdk-input-border-color: #ccc;
-  --sdk-input-border-width: 2px;
-  --sdk-input-padding: 0.75rem 1rem;
-  --sdk-input-font-size: 1rem;
-  --sdk-input-border-radius: 4px;
-  --sdk-input-disabled-opacity: 0.6;
-  --sdk-input-focus-shadow-blur: 3px;
-  --sdk-input-focus-shadow: 0 0 0 var(--sdk-input-focus-shadow-blur)
-    rgba(0, 102, 204, 0.1);
+  /* Component vars default to semantic tokens — re-skin globally by editing
+     tokens, locally by overriding these on the host. */
+  --sdk-input-primary-color:        var(--sdk-color-primary);
+  --sdk-input-border-color:         var(--sdk-color-border-input);
+  --sdk-input-border-color-hover:   var(--sdk-color-border-hover);
+  --sdk-input-border-color-focus:   var(--sdk-color-primary);
+  --sdk-input-border-width:         2px;
+  --sdk-input-padding:              var(--sdk-space-5) var(--sdk-space-6);
+  --sdk-input-font-size:            var(--sdk-font-size-md);
+  --sdk-input-border-radius:        var(--sdk-radius-sm);
+  --sdk-input-bg:                   var(--sdk-color-surface);
+  --sdk-input-color:                var(--sdk-color-text-body);
+  --sdk-input-placeholder-color:    var(--sdk-color-text-placeholder);
+  --sdk-input-disabled-bg:          var(--sdk-color-surface-disabled);
+  --sdk-input-disabled-opacity:     0.6;
+  --sdk-input-focus-shadow:         var(--sdk-shadow-focus);
 }
 
-/**
- * :host(.full-width) - Conditionally style when a CSS class is applied
- * Usage: <sdk-input class="full-width"></sdk-input>
- */
 :host(.full-width) {
   width: 100%;
 }
 
-/**
- * :host(.compact) - Compact variant
- * Usage: <sdk-input class="compact"></sdk-input>
- */
 :host(.compact) {
-  --sdk-input-padding: 0.5rem 0.75rem;
-  --sdk-input-font-size: 0.875rem;
+  --sdk-input-padding:    var(--sdk-space-4) var(--sdk-space-5);
+  --sdk-input-font-size:  var(--sdk-font-size-sm);
 }
 
-/**
- * :host(.large) - Large variant
- * Usage: <sdk-input class="large"></sdk-input>
- */
 :host(.large) {
-  --sdk-input-padding: 1rem 1.5rem;
-  --sdk-input-font-size: 1.125rem;
+  --sdk-input-padding:    var(--sdk-space-6) var(--sdk-space-8);
+  --sdk-input-font-size:  var(--sdk-font-size-lg);
 }
 
-/**
- * :host([disabled]) - Style the host when disabled via attribute binding
- * Usage: <sdk-input [disabled]="true"></sdk-input>
- */
 :host([disabled]) {
   opacity: 0.7;
   pointer-events: none;
 }
 
-/**
- * :host(:focus-within) - Style host when any child has focus
- * Useful for adding visual container effects when input is focused
- */
 :host(:focus-within) {
   --sdk-input-border-color: var(--sdk-input-primary-color);
 }
 
-/**
- * :host - Responsive behavior: Stack on mobile
- * Media queries in :host work at the host level
- */
 @media (max-width: 640px) {
   :host {
     width: 100%;
@@ -81,81 +58,51 @@
 }
 
 /* ============================================================ */
-/* Input Element Styles (inside the template) */
+/* Input Element                                                */
 /* ============================================================ */
 
 .sdk-input {
-  /* Layout */
   display: block;
   width: 100%;
   padding: var(--sdk-input-padding);
 
-  /* Typography */
-  font-family: inherit;
+  font-family: var(--sdk-font-family);
   font-size: var(--sdk-input-font-size);
-  line-height: 1.5;
+  line-height: var(--sdk-line-height-base);
 
-  /* Appearance */
   border: var(--sdk-input-border-width) solid var(--sdk-input-border-color);
   border-radius: var(--sdk-input-border-radius);
-  background-color: #fff;
-  color: #333;
+  background-color: var(--sdk-input-bg);
+  color: var(--sdk-input-color);
 
-  /* Transitions for smooth interactions */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease,
-    background-color 0.2s ease;
+  transition:
+    border-color var(--sdk-transition-base),
+    box-shadow var(--sdk-transition-base),
+    background-color var(--sdk-transition-base);
 
-  /* Remove browser default appearance */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
-/**
- * Focus state: High contrast for accessibility
- * Exceeds WCAG AA color contrast requirements
- */
 .sdk-input:focus {
   outline: none;
-  border-color: var(--sdk-input-primary-color);
+  border-color: var(--sdk-input-border-color-focus);
   box-shadow: var(--sdk-input-focus-shadow);
 }
 
-/**
- * Hover state: Visual feedback for interactivity
- */
 .sdk-input:hover:not(:disabled) {
-  border-color: #999;
+  border-color: var(--sdk-input-border-color-hover);
 }
 
-/**
- * Disabled state: Clear visual indication
- */
 .sdk-input:disabled {
-  background-color: #f5f5f5;
-  color: #999;
+  background-color: var(--sdk-input-disabled-bg);
+  color: var(--sdk-color-text-disabled);
   cursor: not-allowed;
   opacity: var(--sdk-input-disabled-opacity);
 }
 
-/**
- * Placeholder styling: Sufficient color contrast
- */
 .sdk-input::placeholder {
-  color: #999;
+  color: var(--sdk-input-placeholder-color);
   opacity: 1;
 }
-
-.sdk-input::-webkit-input-placeholder {
-  color: #999;
-}
-
-.sdk-input::-moz-placeholder {
-  color: #999;
-  opacity: 1;
-}
-
-.sdk-input:-ms-input-placeholder {
-  color: #999;
-}
-

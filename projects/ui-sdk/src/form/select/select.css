@@ -1,35 +1,38 @@
 /**
  * SDK Select Component Styles
- * Theming via CSS custom properties on :host. The inner sdk-input picks up
- * --sdk-input-* overrides cascaded from the .sdk-select wrapper (no ::ng-deep).
+ *
+ * Theming via SDK design tokens. The inner sdk-input picks up overrides
+ * cascaded from the .sdk-select wrapper (no ::ng-deep needed).
  */
 
 :host {
   display: block;
   width: 100%;
 
-  --sdk-select-primary-color: #0066cc;
-  --sdk-select-border-color: #ccc;
-  --sdk-select-padding: 0.25rem 0.5rem;
-  --sdk-select-font-size: 1rem;
-  --sdk-select-border-radius: 4px;
-  --sdk-select-disabled-opacity: 0.6;
-  --sdk-select-focus-shadow-blur: 3px;
-  --sdk-select-chip-bg: #eef3fb;
-  --sdk-select-chip-color: #0b3b75;
-  --sdk-select-option-hover-bg: #f5f7fa;
-  --sdk-select-option-active-bg: #e6efff;
-  --sdk-select-option-selected-bg: #d6e6ff;
+  --sdk-select-primary-color:        var(--sdk-color-primary);
+  --sdk-select-border-color:         var(--sdk-color-border-input);
+  --sdk-select-padding:              var(--sdk-space-2) var(--sdk-space-4);
+  --sdk-select-font-size:            var(--sdk-font-size-md);
+  --sdk-select-border-radius:        var(--sdk-radius-sm);
+  --sdk-select-bg:                   var(--sdk-color-surface);
+  --sdk-select-disabled-opacity:     0.6;
+  --sdk-select-focus-shadow:         var(--sdk-shadow-focus);
+
+  --sdk-select-chip-bg:              var(--sdk-color-chip-bg);
+  --sdk-select-chip-color:           var(--sdk-color-chip-fg);
+  --sdk-select-option-hover-bg:      var(--sdk-color-surface-hover);
+  --sdk-select-option-active-bg:     var(--sdk-blue-100);
+  --sdk-select-option-selected-bg:   var(--sdk-blue-200);
 }
 
 :host(.compact) {
-  --sdk-select-padding: 0.125rem 0.375rem;
-  --sdk-select-font-size: 0.875rem;
+  --sdk-select-padding:   var(--sdk-space-1) var(--sdk-space-3);
+  --sdk-select-font-size: var(--sdk-font-size-sm);
 }
 
 :host(.large) {
-  --sdk-select-padding: 0.5rem 0.75rem;
-  --sdk-select-font-size: 1.125rem;
+  --sdk-select-padding:   var(--sdk-space-4) var(--sdk-space-5);
+  --sdk-select-font-size: var(--sdk-font-size-lg);
 }
 
 :host(.sdk-select-disabled) {
@@ -51,24 +54,25 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.375rem;
+  gap: var(--sdk-space-3);
   padding: var(--sdk-select-padding);
   border: 2px solid var(--sdk-select-border-color);
   border-radius: var(--sdk-select-border-radius);
-  background-color: #fff;
+  background-color: var(--sdk-select-bg);
   cursor: text;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color var(--sdk-transition-base),
+    box-shadow var(--sdk-transition-base);
 
   /* Cascade overrides into the inner sdk-input via CSS custom properties */
   --sdk-input-border-width: 0;
-  --sdk-input-padding: 0.375rem 0.25rem;
+  --sdk-input-padding: var(--sdk-space-3) var(--sdk-space-2);
   --sdk-input-focus-shadow: none;
 }
 
 .sdk-select:focus-within {
   border-color: var(--sdk-select-primary-color);
-  box-shadow: 0 0 0 var(--sdk-select-focus-shadow-blur)
-    rgba(0, 102, 204, 0.1);
+  box-shadow: var(--sdk-select-focus-shadow);
 }
 
 /* ============================================================ */
@@ -78,11 +82,11 @@
 .sdk-select-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.125rem 0.5rem;
+  gap: var(--sdk-space-2);
+  padding: var(--sdk-space-1) var(--sdk-space-4);
   background-color: var(--sdk-select-chip-bg);
   color: var(--sdk-select-chip-color);
-  border-radius: 999px;
+  border-radius: var(--sdk-radius-pill);
   font-size: calc(var(--sdk-select-font-size) * 0.875);
   line-height: 1.4;
   white-space: nowrap;
@@ -111,7 +115,7 @@
 }
 
 .sdk-select-chip-remove:hover:not(:disabled) {
-  background-color: rgba(11, 59, 117, 0.15);
+  background-color: color-mix(in srgb, var(--sdk-select-chip-color) 18%, transparent);
 }
 
 .sdk-select-chip-remove:disabled {
@@ -127,6 +131,8 @@
   flex: 1 1 8rem;
   min-width: 8rem;
   width: auto;
+  --sdk-input-border-width: 0;
+  --sdk-input-border-color-focus: transparent;
 }
 
 /* ============================================================ */
@@ -136,19 +142,20 @@
 .sdk-select-list {
   list-style: none;
   margin: 0;
-  padding: 0.25rem 0;
+  padding: var(--sdk-space-2) 0;
   min-width: 12rem;
   border: 1px solid var(--sdk-select-border-color);
   border-radius: var(--sdk-select-border-radius);
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: var(--sdk-select-bg);
+  box-shadow: var(--sdk-shadow-md);
   max-height: 14rem;
   overflow-y: auto;
 }
 
 .sdk-select-option {
-  padding: 0.5rem 0.75rem;
+  padding: var(--sdk-space-4) var(--sdk-space-5);
   font-size: var(--sdk-select-font-size);
+  color: var(--sdk-color-text-body);
   cursor: pointer;
   user-select: none;
 }
@@ -163,12 +170,12 @@
 
 .sdk-select-option-selected {
   background-color: var(--sdk-select-option-selected-bg);
-  font-weight: 600;
+  font-weight: var(--sdk-font-weight-semibold);
 }
 
 .sdk-select-empty {
-  padding: 0.5rem 0.75rem;
-  color: #999;
+  padding: var(--sdk-space-4) var(--sdk-space-5);
+  color: var(--sdk-color-text-placeholder);
   font-size: var(--sdk-select-font-size);
   font-style: italic;
 }

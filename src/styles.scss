@@ -1,3 +1,7 @@
+/* SDK design tokens — declares semantic CSS custom properties on :root.
+   Component styles reference these tokens and stay re-themable at runtime. */
+@use '../projects/ui-sdk/src/styles/styles' as sdk;
+
 /* Global styles */
 *,
 *::before,
@@ -9,8 +13,8 @@ body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
-  background: #f8fafc;
-  color: #0f172a;
+  background: var(--sdk-color-surface-muted);
+  color: var(--sdk-color-text);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -20,7 +24,7 @@ html, body {
 
 /* ── CDK Dialog overlay ─────────────────────────────────────────────────── */
 .dialog-backdrop {
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--sdk-color-backdrop);
 }
 
 /* Center the panel in the viewport */

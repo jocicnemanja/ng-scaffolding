@@ -1,34 +1,45 @@
 :host {
   display: block;
   overflow-x: auto;
+
+  --sdk-table-bg:            var(--sdk-color-surface);
+  --sdk-table-radius:        var(--sdk-radius-lg);
+  --sdk-table-shadow:        var(--sdk-shadow-sm);
+  --sdk-table-header-bg:     var(--sdk-color-surface-muted);
+  --sdk-table-header-fg:     var(--sdk-color-text-muted);
+  --sdk-table-header-border: var(--sdk-color-border-strong);
+  --sdk-table-row-fg:        var(--sdk-color-text-body);
+  --sdk-table-row-border:    var(--sdk-color-border-strong);
+  --sdk-table-row-hover-bg:  var(--sdk-color-surface-hover);
+  --sdk-table-cell-padding:  var(--sdk-space-5) var(--sdk-space-6);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 8px;
+  background: var(--sdk-table-bg);
+  border-radius: var(--sdk-table-radius);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--sdk-table-shadow);
 }
 
 :host ::ng-deep thead th {
-  padding: 12px 16px;
+  padding: var(--sdk-table-cell-padding);
   text-align: left;
-  font-weight: 600;
-  font-size: 0.75rem;
+  font-weight: var(--sdk-font-weight-semibold);
+  font-size: var(--sdk-font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64748b;
-  background: #f8fafc;
-  border-bottom: 2px solid #e2e8f0;
+  color: var(--sdk-table-header-fg);
+  background: var(--sdk-table-header-bg);
+  border-bottom: 2px solid var(--sdk-table-header-border);
 }
 
 :host ::ng-deep tbody td {
-  padding: 12px 16px;
-  font-size: 0.875rem;
-  color: #334155;
-  border-bottom: 1px solid #e2e8f0;
+  padding: var(--sdk-table-cell-padding);
+  font-size: var(--sdk-font-size-sm);
+  color: var(--sdk-table-row-fg);
+  border-bottom: 1px solid var(--sdk-table-row-border);
 }
 
 :host ::ng-deep tbody tr:last-child td {
@@ -36,5 +47,5 @@ table {
 }
 
 :host ::ng-deep tbody tr:hover {
-  background: #f1f5f9;
+  background: var(--sdk-table-row-hover-bg);
 }

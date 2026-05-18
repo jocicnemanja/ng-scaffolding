@@ -1,0 +1,11 @@
+/**
+ * SDK theme entrypoint. Consumers do:
+ *   @use 'ui-sdk/styles' as sdk;
+ * or import once globally:
+ *   @use 'ui-sdk/styles';
+ *
+ * This emits the design tokens on :root and forwards mixins for app code.
+ */
+
+@forward 'tokens';
+@forward 'mixins';

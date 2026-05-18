@@ -13,5 +13,11 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "exports": {
+    "./styles": "./styles/styles.scss",
+    "./styles/tokens": "./styles/_tokens.scss",
+    "./styles/mixins": "./styles/_mixins.scss",
+    "./styles/*.scss": "./styles/*.scss"
+  }
 }

@@ -1,14 +1,15 @@
 :host {
-  --sdk-confirm-backdrop: rgba(15, 23, 42, 0.55);
-  --sdk-confirm-bg: #ffffff;
-  --sdk-confirm-fg: #1f2937;
-  --sdk-confirm-muted: #4b5563;
-  --sdk-confirm-border: #e5e7eb;
-  --sdk-confirm-radius: 8px;
-  --sdk-confirm-primary: #0066cc;
-  --sdk-confirm-primary-fg: #ffffff;
-  --sdk-confirm-danger: #dc2626;
-  --sdk-confirm-warning: #d97706;
+  --sdk-confirm-backdrop:     var(--sdk-color-backdrop-strong);
+  --sdk-confirm-bg:           var(--sdk-color-surface);
+  --sdk-confirm-fg:           var(--sdk-color-text-body);
+  --sdk-confirm-muted:        var(--sdk-color-text-subtle);
+  --sdk-confirm-border:       var(--sdk-color-border);
+  --sdk-confirm-radius:       var(--sdk-radius-lg);
+  --sdk-confirm-primary:      var(--sdk-color-primary);
+  --sdk-confirm-primary-fg:   var(--sdk-color-text-on-primary);
+  --sdk-confirm-danger:       var(--sdk-color-danger);
+  --sdk-confirm-warning:      var(--sdk-color-warning);
+  --sdk-confirm-cancel-hover: var(--sdk-color-surface-hover);
 }
 
 .sdk-confirm__backdrop {
@@ -18,8 +19,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  z-index: 1000;
+  padding: var(--sdk-space-6);
+  z-index: var(--sdk-z-modal);
   animation: sdk-confirm-fade 120ms ease-out;
 }
 
@@ -28,41 +29,44 @@
   color: var(--sdk-confirm-fg);
   border-radius: var(--sdk-confirm-radius);
   border: 1px solid var(--sdk-confirm-border);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--sdk-shadow-lg);
   width: 100%;
   max-width: 420px;
-  padding: 1.5rem;
+  padding: var(--sdk-space-8);
   animation: sdk-confirm-pop 140ms ease-out;
 }
 
 .sdk-confirm__title {
-  margin: 0 0 0.5rem;
-  font-size: 1.125rem;
-  font-weight: 600;
+  margin: 0 0 var(--sdk-space-4);
+  font-size: var(--sdk-font-size-lg);
+  font-weight: var(--sdk-font-weight-semibold);
   line-height: 1.4;
 }
 
 .sdk-confirm__message {
-  margin: 0 0 1.25rem;
+  margin: 0 0 var(--sdk-space-7);
   font-size: 0.9375rem;
   color: var(--sdk-confirm-muted);
-  line-height: 1.5;
+  line-height: var(--sdk-line-height-base);
 }
 
 .sdk-confirm__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: var(--sdk-space-4);
 }
 
 .sdk-confirm__btn {
   font: inherit;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  font-weight: var(--sdk-font-weight-medium);
+  padding: var(--sdk-space-4) var(--sdk-space-6);
+  border-radius: var(--sdk-radius-md);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color var(--sdk-transition-fast),
+    border-color var(--sdk-transition-fast),
+    filter var(--sdk-transition-fast);
 }
 
 .sdk-confirm__btn:focus-visible {
@@ -77,7 +81,7 @@
 }
 
 .sdk-confirm__btn--cancel:hover {
-  background: #f3f4f6;
+  background: var(--sdk-confirm-cancel-hover);
 }
 
 .sdk-confirm__btn--confirm {

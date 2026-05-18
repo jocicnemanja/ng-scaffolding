@@ -1,18 +1,28 @@
+:host {
+  --sdk-drawer-bg:           var(--sdk-color-surface);
+  --sdk-drawer-fg:           var(--sdk-color-text);
+  --sdk-drawer-muted:        var(--sdk-color-text-muted);
+  --sdk-drawer-border:       var(--sdk-color-border-strong);
+  --sdk-drawer-hover-bg:     var(--sdk-color-surface-hover);
+  --sdk-drawer-width:        min(480px, 100%);
+}
+
 .sdk-drawer__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--sdk-color-backdrop);
   display: flex;
-  z-index: 1000;
+  z-index: var(--sdk-z-overlay);
 }
 
 .sdk-drawer__panel {
-  background: #ffffff;
+  background: var(--sdk-drawer-bg);
+  color: var(--sdk-drawer-fg);
   height: 100%;
-  width: min(480px, 100%);
+  width: var(--sdk-drawer-width);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--sdk-shadow-drawer);
   animation: sdk-drawer-slide 180ms ease-out;
 }
 
@@ -29,54 +39,47 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid #e2e8f0;
+  padding: var(--sdk-space-6) var(--sdk-space-7);
+  border-bottom: 1px solid var(--sdk-drawer-border);
 }
 
 .sdk-drawer__title {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #0f172a;
+  font-size: var(--sdk-font-size-lg);
+  font-weight: var(--sdk-font-weight-semibold);
+  color: var(--sdk-drawer-fg);
 }
 
 .sdk-drawer__close {
   background: transparent;
   border: 0;
-  padding: 4px;
+  padding: var(--sdk-space-2);
   cursor: pointer;
-  color: #64748b;
+  color: var(--sdk-drawer-muted);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: var(--sdk-radius-sm);
+  transition: background-color var(--sdk-transition-fast), color var(--sdk-transition-fast);
 }
 
 .sdk-drawer__close:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--sdk-drawer-hover-bg);
+  color: var(--sdk-drawer-fg);
 }
 
 .sdk-drawer__body {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 20px;
+  padding: var(--sdk-space-7);
 }
 
 @keyframes sdk-drawer-slide {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 
 @keyframes sdk-drawer-slide-left {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
 }

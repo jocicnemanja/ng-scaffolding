@@ -1,110 +1,110 @@
 :host {
   display: block;
-  padding: 2rem;
+  padding: var(--sdk-space-10);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #1f2937;
+  color: var(--sdk-color-text);
 }
 
 .playground {
   max-width: 720px;
   margin: 0 auto;
   display: grid;
-  gap: 1.5rem;
+  gap: var(--sdk-space-8);
 }
 
 .playground__header h1 {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--sdk-space-2);
   font-size: 1.75rem;
 }
 
 .playground__header p {
   margin: 0;
-  color: #6b7280;
+  color: var(--sdk-color-text-subtle);
 }
 
 .playground__panel {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  background: var(--sdk-color-surface);
+  border: 1px solid var(--sdk-color-border);
+  border-radius: var(--sdk-radius-lg);
+  padding: var(--sdk-space-8);
+  box-shadow: var(--sdk-shadow-sm);
 }
 
 .playground__panel h2 {
-  margin: 0 0 1rem;
-  font-size: 1.125rem;
-  color: #111827;
+  margin: 0 0 var(--sdk-space-6);
+  font-size: var(--sdk-font-size-lg);
+  color: var(--sdk-color-text);
 }
 
 .playground__row {
   display: grid;
   grid-template-columns: 120px 1fr;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  gap: var(--sdk-space-6);
+  margin-bottom: var(--sdk-space-5);
 }
 
 .playground__row label {
-  font-size: 0.875rem;
-  color: #4b5563;
-  font-weight: 500;
+  font-size: var(--sdk-font-size-sm);
+  color: var(--sdk-color-text-subtle);
+  font-weight: var(--sdk-font-weight-medium);
 }
 
 .playground__live {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #e5e7eb;
-  font-size: 0.875rem;
-  color: #4b5563;
+  margin-top: var(--sdk-space-6);
+  padding-top: var(--sdk-space-6);
+  border-top: 1px dashed var(--sdk-color-border);
+  font-size: var(--sdk-font-size-sm);
+  color: var(--sdk-color-text-subtle);
 }
 
 .playground__live code {
-  background: #f3f4f6;
-  padding: 0.125rem 0.375rem;
+  background: var(--sdk-color-surface-hover);
+  padding: var(--sdk-space-1) var(--sdk-space-3);
   border-radius: 3px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .playground__form {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--sdk-space-4);
 }
 
 .playground__reset {
-  margin-top: 0.5rem;
+  margin-top: var(--sdk-space-4);
   justify-self: start;
-  padding: 0.5rem 1rem;
-  border: 1px solid #d1d5db;
-  background: #f9fafb;
-  border-radius: 4px;
+  padding: var(--sdk-space-4) var(--sdk-space-6);
+  border: 1px solid var(--sdk-color-border-hover);
+  background: var(--sdk-color-surface-muted);
+  border-radius: var(--sdk-radius-sm);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--sdk-font-size-sm);
 }
 
 .playground__reset:hover {
-  background: #f3f4f6;
+  background: var(--sdk-color-surface-hover);
 }
 
 .playground__state {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: #0f172a;
-  color: #e2e8f0;
-  border-radius: 4px;
+  margin-top: var(--sdk-space-6);
+  padding: var(--sdk-space-5);
+  background: var(--sdk-slate-900);
+  color: var(--sdk-slate-200);
+  border-radius: var(--sdk-radius-sm);
   font-size: 0.8125rem;
   overflow-x: auto;
 }
 
 .playground__events {
   margin: 0;
-  padding-left: 1.25rem;
-  font-size: 0.875rem;
-  color: #4b5563;
+  padding-left: var(--sdk-space-7);
+  font-size: var(--sdk-font-size-sm);
+  color: var(--sdk-color-text-subtle);
 }
 
 .playground__empty {
   margin: 0;
-  color: #9ca3af;
-  font-size: 0.875rem;
+  color: var(--sdk-color-text-placeholder);
+  font-size: var(--sdk-font-size-sm);
   font-style: italic;
 }
