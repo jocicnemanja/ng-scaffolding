@@ -14,6 +14,11 @@
   <div class="user-area">
     <span class="user-name">{{ userName() }}</span>
     <span class="avatar" aria-hidden="true">{{ userInitial() }}</span>
+
+     <!-- TODO: make this as content projection in the future, so we can use sdk-dropdown here with more options; -->
+    <sdk-checkbox [toggleSwitchModel]="true" (valueChange)="onThemeChange($event)"></sdk-checkbox>
+
+    
     <button class="logout-btn" (click)="auth.logout()" aria-label="Sign out">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />

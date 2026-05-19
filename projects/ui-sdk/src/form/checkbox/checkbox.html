@@ -1,0 +1,32 @@
+<label class="sdk-checkbox" [attr.for]="inputId">
+  <input
+    type="checkbox"
+    class="sdk-checkbox-native"
+    [id]="inputId"
+    [checked]="_checked()"
+    [disabled]="disabled()"
+    [indeterminate]="indeterminate()"
+    [attr.aria-label]="ariaLabel() || null"
+    [attr.aria-checked]="ariaChecked()"
+    (change)="_onNativeChange($event)"
+    (blur)="_onBlur()"
+  />
+
+  <span class="sdk-checkbox-box" aria-hidden="true">
+    <svg class="sdk-checkbox-check" viewBox="0 0 14 14" fill="none">
+      <path
+        d="M2 7.5 5.5 11 12 3.5"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span class="sdk-checkbox-dash"></span>
+  </span>
+
+  @if (label()) {
+    <span class="sdk-checkbox-label">{{ label() }}</span>
+  }
+  <ng-content></ng-content>
+</label>

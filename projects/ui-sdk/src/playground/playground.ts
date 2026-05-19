@@ -3,11 +3,12 @@ import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SdkInput } from '../form/input/input';
 import { SdkSelect } from '../form/select/select';
+import { SdkCheckbox } from '../form/checkbox/checkbox';
 
 @Component({
   selector: 'sdk-playground',
   standalone: true,
-  imports: [SdkInput, SdkSelect, ReactiveFormsModule, JsonPipe],
+  imports: [SdkInput, SdkSelect, SdkCheckbox, ReactiveFormsModule, JsonPipe],
   templateUrl: './playground.html',
   styleUrl: './playground.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

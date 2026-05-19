@@ -4,6 +4,8 @@
 
 // Export the main SDK component
 export * from './form/input/input';
+export * from './form/select/select';
+export * from './form/checkbox/checkbox';
 
 // Confirmation dialog
 export * from './components/confirm-dialog/confirm-dialog';

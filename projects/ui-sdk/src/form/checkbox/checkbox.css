@@ -1,0 +1,229 @@
+/**
+ * SDK Checkbox Component Styles
+ *
+ * Theming via SDK design tokens (declared on :root in styles/_tokens.scss).
+ * The component exposes its own --sdk-checkbox-* knobs so a single instance
+ * can be tuned without touching the global theme.
+ */
+
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+
+  /* Component vars default to semantic tokens — re-skin globally by editing
+     tokens, locally by overriding these on the host. */
+  --sdk-checkbox-primary-color:        var(--sdk-color-primary);
+  --sdk-checkbox-border-color:         var(--sdk-color-border-input);
+  --sdk-checkbox-border-color-hover:   var(--sdk-color-border-hover);
+  --sdk-checkbox-border-width:         2px;
+  --sdk-checkbox-border-radius:        var(--sdk-radius-sm);
+  --sdk-checkbox-size:                 1.125rem;        /* 18px */
+  --sdk-checkbox-gap:                  var(--sdk-space-4);
+  --sdk-checkbox-font-size:            var(--sdk-font-size-md);
+  --sdk-checkbox-bg:                   var(--sdk-color-surface);
+  --sdk-checkbox-color:                var(--sdk-color-text-body);
+  --sdk-checkbox-check-color:          var(--sdk-color-primary-fg);
+  --sdk-checkbox-disabled-bg:          var(--sdk-color-surface-disabled);
+  --sdk-checkbox-disabled-opacity:     0.6;
+  --sdk-checkbox-focus-shadow:         var(--sdk-shadow-focus);
+}
+
+:host(.compact) {
+  --sdk-checkbox-size:      0.875rem;
+  --sdk-checkbox-font-size: var(--sdk-font-size-sm);
+  --sdk-checkbox-gap:       var(--sdk-space-3);
+}
+
+:host(.large) {
+  --sdk-checkbox-size:      1.375rem;
+  --sdk-checkbox-font-size: var(--sdk-font-size-lg);
+  --sdk-checkbox-gap:       var(--sdk-space-5);
+}
+
+:host(.sdk-checkbox-disabled) {
+  opacity: var(--sdk-checkbox-disabled-opacity);
+  pointer-events: none;
+}
+
+/* ============================================================ */
+/* Label container                                              */
+/* ============================================================ */
+
+.sdk-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sdk-checkbox-gap);
+  font-family: var(--sdk-font-family);
+  font-size: var(--sdk-checkbox-font-size);
+  line-height: var(--sdk-line-height-base);
+  color: var(--sdk-checkbox-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ============================================================ */
+/* Native input — visually hidden but still focusable           */
+/* ============================================================ */
+
+.sdk-checkbox-native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================ */
+/* Visual box                                                   */
+/* ============================================================ */
+
+.sdk-checkbox-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--sdk-checkbox-size);
+  height: var(--sdk-checkbox-size);
+  border: var(--sdk-checkbox-border-width) solid var(--sdk-checkbox-border-color);
+  border-radius: var(--sdk-checkbox-border-radius);
+  background-color: var(--sdk-checkbox-bg);
+  transition:
+    border-color var(--sdk-transition-base),
+    background-color var(--sdk-transition-base),
+    box-shadow var(--sdk-transition-base);
+}
+
+.sdk-checkbox:hover .sdk-checkbox-box {
+  border-color: var(--sdk-checkbox-border-color-hover);
+}
+
+.sdk-checkbox-native:focus-visible + .sdk-checkbox-box {
+  border-color: var(--sdk-checkbox-primary-color);
+  box-shadow: var(--sdk-checkbox-focus-shadow);
+}
+
+:host(.sdk-checkbox-checked) .sdk-checkbox-box,
+:host(.sdk-checkbox-indeterminate) .sdk-checkbox-box {
+  background-color: var(--sdk-checkbox-primary-color);
+  border-color: var(--sdk-checkbox-primary-color);
+}
+
+:host(.sdk-checkbox-disabled) .sdk-checkbox-box {
+  background-color: var(--sdk-checkbox-disabled-bg);
+  cursor: not-allowed;
+}
+
+/* ============================================================ */
+/* Checkmark                                                    */
+/* ============================================================ */
+
+.sdk-checkbox-check {
+  width: 80%;
+  height: 80%;
+  color: var(--sdk-checkbox-check-color);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--sdk-transition-fast),
+    transform var(--sdk-transition-fast);
+}
+
+:host(.sdk-checkbox-checked:not(.sdk-checkbox-indeterminate)) .sdk-checkbox-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================================ */
+/* Indeterminate dash                                           */
+/* ============================================================ */
+
+.sdk-checkbox-dash {
+  position: absolute;
+  display: block;
+  width: 60%;
+  height: 2px;
+  background-color: var(--sdk-checkbox-check-color);
+  border-radius: 1px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--sdk-transition-fast),
+    transform var(--sdk-transition-fast);
+}
+
+:host(.sdk-checkbox-indeterminate) .sdk-checkbox-dash {
+  opacity: 1;
+  transform: scale(1);
+}
+
+:host(.sdk-checkbox-indeterminate) .sdk-checkbox-check {
+  opacity: 0;
+}
+
+/* ============================================================ */
+/* Label text                                                   */
+/* ============================================================ */
+
+.sdk-checkbox-label {
+  color: inherit;
+}
+
+:host(.sdk-checkbox-disabled) .sdk-checkbox-label {
+  color: var(--sdk-color-text-disabled);
+}
+
+/* ============================================================ */
+/* Switch variant — set via `[toggleSwitchModel]="true"`        */
+/* ============================================================ */
+
+:host(.sdk-checkbox-switch) {
+  --sdk-checkbox-switch-width:  calc(var(--sdk-checkbox-size) * 1.9);
+  --sdk-checkbox-switch-height: var(--sdk-checkbox-size);
+  --sdk-checkbox-switch-knob:   calc(var(--sdk-checkbox-size) - var(--sdk-checkbox-border-width) * 2 - 2px);
+  --sdk-checkbox-switch-track:  var(--sdk-color-border-input);
+}
+
+:host(.sdk-checkbox-switch) .sdk-checkbox-box {
+  width: var(--sdk-checkbox-switch-width);
+  height: var(--sdk-checkbox-switch-height);
+  border-radius: var(--sdk-radius-pill);
+  background-color: var(--sdk-checkbox-switch-track);
+  border-color: var(--sdk-checkbox-switch-track);
+  justify-content: flex-start;
+  padding: 1px;
+}
+
+/* Hide the checkmark + dash in switch mode — replaced by the knob. */
+:host(.sdk-checkbox-switch) .sdk-checkbox-check,
+:host(.sdk-checkbox-switch) .sdk-checkbox-dash {
+  display: none;
+}
+
+/* Knob — rendered as ::after so we don't need extra DOM. */
+:host(.sdk-checkbox-switch) .sdk-checkbox-box::after {
+  content: '';
+  display: block;
+  width: var(--sdk-checkbox-switch-knob);
+  height: var(--sdk-checkbox-switch-knob);
+  border-radius: 50%;
+  background-color: var(--sdk-color-surface);
+  box-shadow: var(--sdk-shadow-sm);
+  transform: translateX(0);
+  transition: transform var(--sdk-transition-base);
+}
+
+:host(.sdk-checkbox-switch.sdk-checkbox-checked) .sdk-checkbox-box {
+  background-color: var(--sdk-checkbox-primary-color);
+  border-color: var(--sdk-checkbox-primary-color);
+}
+
+:host(.sdk-checkbox-switch.sdk-checkbox-checked) .sdk-checkbox-box::after {
+  transform: translateX(
+    calc(var(--sdk-checkbox-switch-width) - var(--sdk-checkbox-switch-knob) - var(--sdk-checkbox-border-width) * 2 - 2px)
+  );
+}
